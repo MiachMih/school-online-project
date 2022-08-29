@@ -11,7 +11,6 @@ exports.getStudents = (req,res, next) => {
 }
 
 exports.postStudent = (req, res, next) => {
-    console.log(req.body)
     const student = new Student({name: req.body.name});
     student.save()
     .then( () => {
