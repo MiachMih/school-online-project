@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function UpdateForm() {
-  return (
-    <div>UpdateForm</div>
-  )
+  return <div>UpdateForm</div>;
 }
 
-export default UpdateForm
+export default UpdateForm;

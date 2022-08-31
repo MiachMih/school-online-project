@@ -1,13 +1,11 @@
-import React, {useState} from 'react'
+import React from "react";
 
-function Student(props) {
-  const [isShow, setShow] = useState(false);
+function Student() {
   return (
     <>
-        <h1>Student name: {props.name}</h1>
-        
+      <h1>Student</h1>
     </>
-  )
+  );
 }
 
-export default Student
+export default Student;
