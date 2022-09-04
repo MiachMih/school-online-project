@@ -1,13 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
-const url = 'http://localhost:5000/';
+const API = axios.create({ baseURL: "http://localhost:5000" });
 
-export async function fetchStudents() {
-    return axios.get(url);
-}
+API.interceptors.request.use((req) => {
+  if (localStorage.getItem("profile")) {
+    req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("profile")).token
+    }`;
+  }
 
-export async function addStudent(newStudent) {
-    axios.post(url, newStudent)
-    .then(response => {console.log(response)})
-    .catch((error) => {console.log(error)});
-}
+  return req;
+});
+
+export const fetchStudent = async (id) => API.get(`/student/${id}`);
+export const studentLogin = async (loginData) =>
+  API.post("/student/login", loginData);
+export const studentSignUp = async (signUpData) =>
+  API.post("/student/signup", signUpData);

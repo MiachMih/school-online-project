@@ -60,7 +60,8 @@ exports.signupStudent = async (req, res, next) => {
   const { email, name, password, address, age, class_grade } = req.body;
   try {
     const existingStudent = await Student.findOne({ email });
-
+    //TODO: give a detailed validation for each element
+    // then in client side make dynamic responses
     if (!(email && name && password && address && age && class_grade)) {
       return res.status(400).json({ message: "All inputs are required" });
     }

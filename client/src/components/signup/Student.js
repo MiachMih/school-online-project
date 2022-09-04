@@ -1,31 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Student.module.css";
+import { signUpStudent } from "../../store/student-slice";
+import { useDispatch } from "react-redux";
 
 function Student() {
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({ class_grade: 9 });
+
+  async function submitHandler(e) {
+    e.preventDefault();
+    dispatch(signUpStudent(form));
+  }
+
+  function changeHandler(e) {
+    return setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <form className={styles.form}>
+        <form onSubmit={submitHandler} className={styles.form}>
           <h1 className={styles.title}>Student</h1>
           <div className={styles.inputs}>
             <label>Name</label>
-            <input type="text" name="name"></input>
+            <input type="text" name="name" onChange={changeHandler}></input>
           </div>
           <div className={styles.inputs}>
             <label>Email</label>
-            <input type="email" name="email"></input>
+            <input type="email" name="email" onChange={changeHandler}></input>
           </div>
           <div className={styles.inputs}>
             <label>Age</label>
-            <input type="number" name="age"></input>
+            <input type="number" name="age" onChange={changeHandler}></input>
           </div>
           <div className={styles.inputs}>
             <label>Password</label>
-            <input type="password" name="password"></input>
+            <input
+              type="password"
+              name="password"
+              onChange={changeHandler}
+            ></input>
           </div>
           <div className={styles.inputs}>
             <label>Class Grade</label>
-            <select name="grade">
+            <select name="class_grade" onChange={changeHandler}>
               <option value="9">Freshman</option>
               <option value="10">Sophomore</option>
               <option value="11">Junior</option>
@@ -34,9 +52,9 @@ function Student() {
           </div>
           <div className={styles.inputs}>
             <label>Address</label>
-            <input type="text" name="address"></input>
+            <input type="text" name="address" onChange={changeHandler}></input>
           </div>
-          <button type="button">Signup</button>
+          <button type="submit">Signup</button>
         </form>
       </div>
     </div>
