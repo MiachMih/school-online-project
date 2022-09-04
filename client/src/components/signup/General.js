@@ -1,7 +1,12 @@
 import React from "react";
+import Student from "./Student";
 
 function General() {
-  return <div>General</div>;
+  return (
+    <div>
+      <Student />
+    </div>
+  );
 }
 
 export default General;
