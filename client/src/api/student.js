@@ -12,8 +12,8 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const fetchStudent = async (id) => API.get(`/student/${id}`);
-export const studentLogin = async (loginData) =>
+export const fetchStudent = async () => API.get(`/student/profile`);
+export const loginStudent = async (loginData) =>
   API.post("/student/login", loginData);
-export const studentSignUp = async (signUpData) =>
+export const signUpStudent = async (signUpData) =>
   API.post("/student/signup", signUpData);

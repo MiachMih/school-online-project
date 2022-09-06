@@ -12,6 +12,7 @@ function App() {
         <Route exact path="/" element={<Student />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/student" element={<Student />} />
       </Routes>
     </Fragment>
   );

@@ -2,34 +2,20 @@ require("dotenv").config();
 const Student = require("../models/student");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { response } = require("express");
 
-exports.getStudents = (req, res, next) => {
-  Student.find({})
-    .then((students) => {
-      res.json(students);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
-exports.postStudent = (req, res, next) => {
-  const student = new Student({ ...req.body });
-  student
-    .save()
-    .then(() => {
-      console.log("Student added to database");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+exports.getStudent = async (req, res, next) => {
+  const id = req.userId;
+  try {
+    const student = await Student.findById(id);
+    res.status(200).json({ result: student });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 exports.loginStudent = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     const existingStudent = await Student.findOne({
       email: email.toLowerCase(),
     });
@@ -44,10 +30,16 @@ exports.loginStudent = async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { email: existingStudent.email, password: existingStudent.password },
+      {
+        email: existingStudent.email.toLowerCase(),
+        password,
+        id: existingStudent._id,
+      },
       process.env.SECRET_KEY,
       { expiresIn: "2h" }
     );
+
+    console.log(existingStudent);
 
     res.status(200).json({ result: existingStudent, token });
   } catch (error) {
@@ -85,7 +77,7 @@ exports.signupStudent = async (req, res, next) => {
     });
 
     const token = jwt.sign(
-      { email: result.email, id: result._id },
+      { email, password, id: result._id },
       process.env.SECRET_KEY,
       { expiresIn: "2h" }
     );
