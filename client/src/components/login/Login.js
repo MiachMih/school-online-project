@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Login.module.css";
 import styled from "styled-components";
 import bg from "../../assets/galaxy-night-view.jpg";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { loginStudent } from "../../store/student-slice";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginStudent, validate } from "../../store/student-slice";
 
 //TODO: fetch the background image from an API
 // and render Loading screen while waiting for the picture
@@ -21,20 +21,30 @@ const Container = styled.div`
 
 function Login() {
   const [loginData, setLoginData] = useState({});
+  const isLoading = useSelector((state) => state.student.loading);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(validate(navigate));
+  }, [dispatch, navigate]);
 
   function submitHandler(e) {
     e.preventDefault();
-    dispatch(loginStudent(loginData));
+    dispatch(loginStudent(loginData, navigate));
   }
 
   function changeHandler(e) {
     return setLoginData({ ...loginData, [e.target.name]: e.target.value });
   }
 
+  if (isLoading) {
+    return <>...Loading</>;
+  }
+
   return (
     <Container bg={bg}>
-      <div className={styles.content}>
+      <div id="hi" className={styles.content}>
         <h1 className={styles.title}>Welcome</h1>
         <form onSubmit={submitHandler} className={styles.form}>
           {/* TODO: validate email with an API
@@ -53,7 +63,9 @@ function Login() {
           <button className={styles.btn}>Login</button>
           <div className={styles.links}>
             {/*TODO: add a link page to reset password */}
-            <a className={styles.link}>Forgot password</a>
+            <a href="#hi" className={styles.link}>
+              Forgot password
+            </a>
             <Link to="/signup" className={styles.link}>
               New User
             </Link>

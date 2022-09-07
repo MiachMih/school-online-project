@@ -16,8 +16,7 @@ const studentSlice = createSlice({
     create(state, action) {
       const { result, token } = action.payload;
       localStorage.setItem("profile", JSON.stringify({ token }));
-      console.log(result);
-      return { ...state, studentInfo: result };
+      return { ...state, studentInfo: result, loading: false };
     },
     saveStudentInfo(state, action) {
       const studentInfo = action.payload;
@@ -30,33 +29,50 @@ const studentSlice = createSlice({
   },
 });
 
-export const fetchStudent = () => {
+export const fetchStudent = (navigate) => {
   return async (dispatch) => {
     try {
       dispatch(studentActions.startLoading());
       const studentInfo = await api.fetchStudent();
-      console.log(studentInfo.data);
       dispatch(studentActions.saveStudentInfo(studentInfo.data.result));
       dispatch(studentActions.endLoading());
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.response.data.message);
+      navigate("/login", { replace: true });
+    }
   };
 };
 
-export const loginStudent = (loginData) => {
+export const loginStudent = (loginData, navigate) => {
   return async (dispatch) => {
     try {
       const response = await api.loginStudent(loginData);
       dispatch(studentActions.create(response.data));
+      navigate("/student", { replace: true });
     } catch (error) {}
   };
 };
 
-export const signUpStudent = (signUpData) => {
+export const signUpStudent = (signUpData, navigate) => {
   return async (dispatch) => {
     try {
       const response = await api.signUpStudent(signUpData);
       dispatch(studentActions.create(response.data));
+      navigate("/student", { replace: true });
     } catch (error) {}
+  };
+};
+
+export const validate = (navigate) => {
+  return async (dispatch) => {
+    dispatch(studentActions.startLoading());
+    try {
+      const response = await api.validate();
+      if (response.data.valid) {
+        navigate("/student");
+      }
+    } catch (error) {}
+    dispatch(studentActions.endLoading());
   };
 };
 

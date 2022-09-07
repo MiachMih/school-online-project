@@ -86,3 +86,17 @@ exports.signupStudent = async (req, res, next) => {
     console.log(error);
   }
 };
+
+exports.validate = async (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(403).json({ valid: false });
+  }
+  try {
+    jwt.verify(token, process.env.SECRET_KEY);
+    res.status(200).json({ valid: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Token is invalid" });
+  }
+};

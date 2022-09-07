@@ -2,8 +2,16 @@ import React from "react";
 import { CgProfile } from "react-icons/cg";
 import styles from "./Nav.module.css";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { studentActions } from "../../store/student-slice";
 
 function Nav(props) {
+  const dispatch = useDispatch();
+
+  function logoutHandler() {
+    dispatch(studentActions.logout());
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -53,6 +61,13 @@ function Nav(props) {
               <Link to="announcement" className={styles.btn}>
                 <CgProfile className={`${styles.icon} ${styles.nested}`} />
                 <span>Announcement</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link onClick={logoutHandler} to="/login" className={styles.btn}>
+                <CgProfile className={`${styles.icon} ${styles.nested}`} />
+                <span>Logout</span>
               </Link>
             </li>
           </ul>

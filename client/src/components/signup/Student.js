@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import styles from "./Student.module.css";
 import { signUpStudent } from "../../store/student-slice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Student() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ class_grade: 9 });
 
   async function submitHandler(e) {
     e.preventDefault();
-    dispatch(signUpStudent(form));
+    dispatch(signUpStudent(form, navigate));
   }
 
   function changeHandler(e) {
