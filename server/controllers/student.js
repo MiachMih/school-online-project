@@ -39,8 +39,6 @@ exports.loginStudent = async (req, res, next) => {
       { expiresIn: "2h" }
     );
 
-    console.log(existingStudent);
-
     res.status(200).json({ result: existingStudent, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });

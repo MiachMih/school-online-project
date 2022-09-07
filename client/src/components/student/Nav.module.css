@@ -1,0 +1,110 @@
+.container {
+  height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  position: static;
+  width: 17em;
+  height: 100%;
+  top: 0;
+  overflow: hidden;
+  background-color: #19222a;
+  transform: translateZ(0);
+  visibility: visible;
+}
+.sidebar header {
+  background-color: #09f;
+  width: 100%;
+  display: block;
+  padding: 0.75em 1em;
+}
+
+.navigation {
+  position: fixed;
+  background-color: #19222a;
+  height: 100%;
+  font-weight: 400;
+  font-size: 1.2em;
+  overflow: auto;
+  padding-bottom: 6em;
+  z-index: 9;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.navigation li > a:link {
+  text-decoration: none;
+}
+
+.navigation li {
+  margin-left: 0;
+  padding-left: 0;
+  min-width: 13em;
+  display: inline-block;
+  width: 100%;
+}
+
+.navigation .btn {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.75em;
+  padding: 1.05em 1em;
+  position: relative;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  cursor: pointer;
+}
+.navigation .btn:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+  transition: all 0.6s ease;
+}
+
+.navigation.icon {
+  font-size: 3em;
+  width: 9em;
+  display: inline;
+  vertical-align: middle;
+}
+
+/* a less-than sign at the end of the container < */
+.navigation li > .btn:after {
+  content: "\003C";
+  font-size: 1em;
+  width: 10px;
+  color: #fff;
+  position: absolute;
+  right: 0.75em;
+  top: 30%;
+}
+
+.flyout {
+  position: absolute;
+  background-color: #080d11;
+  z-index: 9;
+  left: 2.5em;
+  top: 0;
+  height: 100vh;
+  transform: translateX(100%);
+  transition: all 0.5s ease;
+}
+
+.flyout .btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.navigation li:hover .flyout {
+  transform: translateX(0);
+  transition: all 0.5s ease;
+}
+
+/*
+  TODO: Add media queries
+  fix styling
+  */
+
+@media (max-width: 1024px) {
+}
