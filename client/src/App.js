@@ -12,7 +12,7 @@ function App() {
         <Route exact path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/student/*" element={<Student />}></Route>
+        <Route path="/student/*" element={<Student />} />
       </Routes>
     </Fragment>
   );

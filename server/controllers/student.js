@@ -5,16 +5,45 @@ const jwt = require("jsonwebtoken");
 
 exports.getStudent = async (req, res, next) => {
   const id = req.userId;
+  const password = req.userPassword;
+
   try {
     const student = await Student.findById(id);
-    res.status(200).json({ result: student });
+    const result = { ...student._doc, password: password };
+    res.status(200).json({ result });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 };
 
+exports.updateStudent = async (req, res, next) => {
+  const id = req.userId;
+  const { email, password, name, age, address } = req.body;
+  //TODO: give a detailed validation for each element
+  // then in client side make dynamic responses
+  try {
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const student = await Student.findOneAndUpdate(
+      { _id: id },
+      { email, password: hashedPassword, name, age, address }
+    );
+
+    const token = jwt.sign({ email, password, id }, process.env.SECRET_KEY, {
+      expiresIn: "2h",
+    });
+
+    const result = { ...student._doc, password: password };
+    res.status(200).json({ result, token });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+    console.log(error);
+  }
+};
+
 exports.loginStudent = async (req, res, next) => {
   try {
+    //TODO: give a detailed validation for each element
+    // then in client side make dynamic responses
     const { email, password } = req.body;
     const existingStudent = await Student.findOne({
       email: email.toLowerCase(),
@@ -22,8 +51,10 @@ exports.loginStudent = async (req, res, next) => {
     if (!existingStudent) {
       return res.status(400).json({ message: "Student doesn't exist" });
     }
-
-    const isPasswordValid = bcrypt.compare(password, existingStudent.password);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingStudent.password
+    );
 
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid password" });
@@ -39,7 +70,8 @@ exports.loginStudent = async (req, res, next) => {
       { expiresIn: "2h" }
     );
 
-    res.status(200).json({ result: existingStudent, token });
+    const result = { ...existingStudent._doc, password: password };
+    res.status(200).json({ result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);
@@ -62,7 +94,7 @@ exports.signupStudent = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const result = await Student.create({
+    const student = await Student.create({
       email: email.toLowerCase(),
       password: hashedPassword,
       name,
@@ -73,6 +105,7 @@ exports.signupStudent = async (req, res, next) => {
       detention_count: 0,
       GPA: 4,
     });
+    const result = { ...student._doc, password: password };
 
     const token = jwt.sign(
       { email, password, id: result._id },
@@ -90,7 +123,7 @@ exports.signupStudent = async (req, res, next) => {
 exports.validate = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return res.status(403).json({ valid: false });
+    return res.status(200).json({ valid: false });
   }
   try {
     jwt.verify(token, process.env.SECRET_KEY);

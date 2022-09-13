@@ -9,6 +9,7 @@ const auth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.userId = decoded.id;
+    req.userPassword = decoded.password;
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Invalid token" });

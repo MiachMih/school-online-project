@@ -16,35 +16,38 @@ function Student() {
   /*TODO: fix styling in Nav.module.css 
 
     Add modal for small screens in Nav
+    add loading screen
+    return dynamic responses to the input fields on update of profile
   */
 
   const dispatch = useDispatch();
   const student = useSelector((state) => state.student.studentInfo);
+  const isNew = useSelector((state) => state.student.isNew);
   const isLoading = useSelector((state) => state.student.loading);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!student?._id) {
+    if (isNew) {
       dispatch(fetchStudent(navigate));
     }
-  }, [dispatch, student, navigate]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  }, [dispatch, isNew, student, navigate]);
 
   return (
     <>
       <Nav>
-        <Routes>
-          <Route path="/" element={<Profile student={student} />} />
-          <Route path="/profile" element={<Profile student={student} />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/billing" element={<Billing />} />
-          <Route path="/announcement" element={<Announcement />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/edit-classes" element={<EditClasses />} />
-        </Routes>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <Routes>
+            <Route path="/" element={<Profile student={student} />} />
+            <Route path="/profile" element={<Profile student={student} />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/billing" element={<Billing />} />
+            <Route path="/announcement" element={<Announcement />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/edit-classes" element={<EditClasses />} />
+          </Routes>
+        )}
       </Nav>
     </>
   );

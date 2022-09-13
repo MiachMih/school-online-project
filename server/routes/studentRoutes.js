@@ -9,5 +9,6 @@ router.post("/login", studentController.loginStudent);
 router.post("/signup", studentController.signupStudent);
 router.get("/validate", studentController.validate);
 router.get("/profile", auth, studentController.getStudent);
+router.put("/profile", auth, studentController.updateStudent);
 
 module.exports = router;

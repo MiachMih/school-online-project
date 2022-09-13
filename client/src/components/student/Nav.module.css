@@ -3,7 +3,12 @@
   display: flex;
 }
 
+.content {
+  width: 100%;
+}
+
 .sidebar {
+  user-select: none;
   position: static;
   width: 17em;
   height: 100%;

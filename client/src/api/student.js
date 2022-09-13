@@ -18,3 +18,5 @@ export const loginStudent = async (loginData) =>
 export const signUpStudent = async (signUpData) =>
   API.post("/student/signup", signUpData);
 export const validate = async () => API.get("/student/validate");
+export const updateStudent = async (updateData) =>
+  API.put("/student/profile", updateData);
