@@ -1,35 +1,8 @@
-.container {
-  height: 100vh;
-  width: 100vw;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .content {
   padding: 40px 30px;
   width: 80%;
   max-width: 600px;
   border-radius: 5px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 40px;
-}
-
-.title {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: normal;
-}
-
-.inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
+  background: transparent;
+  background: rgba(138, 62, 27, 0.212);
 }

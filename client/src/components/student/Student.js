@@ -10,7 +10,7 @@ import Billing from "./billing/Billing";
 import Announcement from "./announcement/Announcement";
 import Schedule from "./schedule/Schedule";
 import EditClasses from "./edit-classes/EditClasses";
-import Nav from "./Nav";
+import Nav from "./StudentNav";
 
 function Student() {
   /*TODO: fix styling in Nav.module.css 

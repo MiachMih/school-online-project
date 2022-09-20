@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const studentRoutes = require("./routes/studentRoutes");
+const classesRoutes = require("./routes/classesRoutes");
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -16,6 +17,7 @@ const CONNECTION_URL =
 app.use(cors());
 
 app.use("/student", studentRoutes);
+app.use("/classes", classesRoutes);
 
 mongoose
   .connect(CONNECTION_URL)

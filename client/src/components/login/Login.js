@@ -5,6 +5,7 @@ import bg from "../../assets/galaxy-night-view.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginStudent, validate } from "../../store/student-slice";
+import Form, { Email, Password, Title } from "../form/Form";
 
 //TODO: fetch the background image from an API
 // and render Loading screen while waiting for the picture
@@ -45,24 +46,16 @@ function Login() {
   return (
     <Container bg={bg}>
       <div id="hi" className={styles.content}>
-        <h1 className={styles.title}>Welcome</h1>
-        <form onSubmit={submitHandler} className={styles.form}>
-          {/* TODO: validate email with an API
-                    and display correct responses*/}
-          <div className={styles.inputs}>
-            <label htmlFor="email">Username</label>
-            <input type="email" name="email" onChange={changeHandler} />
-          </div>
+        <Title>Welcome</Title>
+        <Form onSubmit={submitHandler} btnName="Login">
+          <Email onChange={changeHandler} name="email">
+            Email
+          </Email>
+          <Password onChange={changeHandler} name="password">
+            Password
+          </Password>
 
-          {/* TODO: validate password with an API
-                    and display correct responses*/}
-          <div className={`${styles.inputs}`}>
-            <label htmlFor="password">Password</label>
-            <input type="password" name="password" onChange={changeHandler} />
-          </div>
-          <button className={styles.btn}>Login</button>
           <div className={styles.links}>
-            {/*TODO: add a link page to reset password */}
             <a href="#hi" className={styles.link}>
               Forgot password
             </a>
@@ -70,7 +63,7 @@ function Login() {
               New User
             </Link>
           </div>
-        </form>
+        </Form>
       </div>
     </Container>
   );

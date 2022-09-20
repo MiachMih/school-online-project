@@ -11,7 +11,6 @@ const auth = async (req, res, next) => {
     req.userId = decoded.id;
     req.userPassword = decoded.password;
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: "Invalid token" });
   }
   next();

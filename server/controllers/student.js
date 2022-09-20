@@ -8,11 +8,11 @@ exports.getStudent = async (req, res, next) => {
   const password = req.userPassword;
 
   try {
-    const student = await Student.findById(id);
-    const result = { ...student._doc, password: password };
-    res.status(200).json({ result });
+    const student = await Student.findById(id).lean();
+    const result = { ...student, password: password };
+    return res.status(200).json({ result });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
 };
 
@@ -26,17 +26,17 @@ exports.updateStudent = async (req, res, next) => {
     const student = await Student.findOneAndUpdate(
       { _id: id },
       { email, password: hashedPassword, name, age, address }
-    );
+    ).lean();
 
     const token = jwt.sign({ email, password, id }, process.env.SECRET_KEY, {
       expiresIn: "2h",
     });
 
-    const result = { ...student._doc, password: password };
-    res.status(200).json({ result, token });
+    const result = { ...student, password: password };
+    return res.status(200).json({ result, token });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
     console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -47,10 +47,12 @@ exports.loginStudent = async (req, res, next) => {
     const { email, password } = req.body;
     const existingStudent = await Student.findOne({
       email: email.toLowerCase(),
-    });
+    }).lean();
+
     if (!existingStudent) {
       return res.status(400).json({ message: "Student doesn't exist" });
     }
+
     const isPasswordValid = await bcrypt.compare(
       password,
       existingStudent.password
@@ -70,18 +72,18 @@ exports.loginStudent = async (req, res, next) => {
       { expiresIn: "2h" }
     );
 
-    const result = { ...existingStudent._doc, password: password };
-    res.status(200).json({ result, token });
+    const result = { ...existingStudent, password: password };
+    return res.status(200).json({ result, token });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
     console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 exports.signupStudent = async (req, res, next) => {
   const { email, name, password, address, age, class_grade } = req.body;
   try {
-    const existingStudent = await Student.findOne({ email });
+    const existingStudent = await Student.findOne({ email }).lean();
     //TODO: give a detailed validation for each element
     // then in client side make dynamic responses
     if (!(email && name && password && address && age && class_grade)) {
@@ -104,8 +106,7 @@ exports.signupStudent = async (req, res, next) => {
       honors_classes_taken: 0,
       detention_count: 0,
       GPA: 4,
-    });
-    const result = { ...student._doc, password: password };
+    }).lean();
 
     const token = jwt.sign(
       { email, password, id: result._id },
@@ -113,10 +114,11 @@ exports.signupStudent = async (req, res, next) => {
       { expiresIn: "2h" }
     );
 
-    res.status(201).json({ result, token });
+    const result = { ...student, password: password };
+    return res.status(201).json({ result, token });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
     console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -127,9 +129,9 @@ exports.validate = async (req, res, next) => {
   }
   try {
     jwt.verify(token, process.env.SECRET_KEY);
-    res.status(200).json({ valid: true });
+    return res.status(200).json({ valid: true });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Token is invalid" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };

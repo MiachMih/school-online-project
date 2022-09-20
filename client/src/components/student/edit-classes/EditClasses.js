@@ -1,7 +1,13 @@
 import React from "react";
+import CreateClass from "./CreateClass";
 
 function EditClasses() {
-  return <div>EditClasses</div>;
+  return (
+    <div>
+      <CreateClass />
+      EditClasses
+    </div>
+  );
 }
 
 export default EditClasses;

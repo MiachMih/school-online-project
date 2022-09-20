@@ -2,9 +2,14 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+// TODO: change all date: String to date: Date
+
 const studentSchema = new Schema({
   name: String,
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+  },
   password: String,
   age: Number,
   class_grade: Number,

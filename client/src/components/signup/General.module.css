@@ -1,0 +1,39 @@
+.container {
+  max-height: 60em;
+  min-height: 100vh;
+  max-width: 100vw;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(16, 48, 78, 0.555);
+  gap: 1em;
+  padding: 2.5em 0;
+}
+
+.links {
+  display: flex;
+  justify-content: space-around;
+  max-width: 600px;
+  width: 80%;
+}
+
+.links a {
+  all: unset;
+  font-weight: 400;
+  padding: 0.5em 1em;
+  border: solid 1px rgba(8, 43, 77, 0.747);
+  background: rgba(50, 137, 219, 0.144);
+  border-radius: 0.2em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.links a:hover {
+  color: white;
+  transition: var(--transition);
+  background: rgba(33, 99, 161, 0.185);
+  box-shadow: 0 0 2px rgba(33, 99, 161);
+}

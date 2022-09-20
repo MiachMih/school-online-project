@@ -3,6 +3,15 @@ import styles from "./Student.module.css";
 import { signUpStudent } from "../../store/student-slice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Form, {
+  Title,
+  Text,
+  Email,
+  Number,
+  Password,
+  Select,
+  Option,
+} from "../form/Form";
 
 function Student() {
   const dispatch = useDispatch();
@@ -19,46 +28,32 @@ function Student() {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <form onSubmit={submitHandler} className={styles.form}>
-          <h1 className={styles.title}>Student</h1>
-          <div className={styles.inputs}>
-            <label>Name</label>
-            <input type="text" name="name" onChange={changeHandler}></input>
-          </div>
-          <div className={styles.inputs}>
-            <label>Email</label>
-            <input type="email" name="email" onChange={changeHandler}></input>
-          </div>
-          <div className={styles.inputs}>
-            <label>Age</label>
-            <input type="number" name="age" onChange={changeHandler}></input>
-          </div>
-          <div className={styles.inputs}>
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              onChange={changeHandler}
-            ></input>
-          </div>
-          <div className={styles.inputs}>
-            <label>Class Grade</label>
-            <select name="class_grade" onChange={changeHandler}>
-              <option value="9">Freshman</option>
-              <option value="10">Sophomore</option>
-              <option value="11">Junior</option>
-              <option value="12">Senior</option>
-            </select>
-          </div>
-          <div className={styles.inputs}>
-            <label>Address</label>
-            <input type="text" name="address" onChange={changeHandler}></input>
-          </div>
-          <button type="submit">Signup</button>
-        </form>
-      </div>
+    <div className={styles.content}>
+      <Form onSubmit={submitHandler} btnName="Signup">
+        <Title>Student</Title>
+        <Text name="name" onChange={changeHandler}>
+          Name
+        </Text>
+        <Email name="email" onChange={changeHandler}>
+          Email
+        </Email>
+        <Number name="age" onChange={changeHandler}>
+          Age
+        </Number>
+        <Password name="password" onChange={changeHandler}>
+          Password
+        </Password>
+        <Select name="class_grade" label="Class Grade" onChange={changeHandler}>
+          <Option value="9">Freshman</Option>
+          <Option value="10">Sophomore</Option>
+          <Option value="11">Junior</Option>
+          <Option value="12">Senior</Option>
+        </Select>
+
+        <Text name="address" onChange={changeHandler}>
+          Address
+        </Text>
+      </Form>
     </div>
   );
 }
