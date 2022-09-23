@@ -1,34 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as api from "../api/student";
-
-const initialState = { loading: true, studentInfo: {}, isNew: true };
+import * as utility from "./utility-functions";
 
 const studentSlice = createSlice({
   name: "student",
-  initialState,
+  initialState: utility.initialState,
   reducers: {
-    startLoading(state) {
-      return { ...state, loading: true };
-    },
-    endLoading(state) {
-      return { ...state, loading: false };
-    },
-    create(state, action) {
-      const { result, token } = action.payload;
-      localStorage.setItem("profile", JSON.stringify({ token }));
-      return { ...state, studentInfo: result, loading: false, isNew: true };
-    },
-    saveStudentInfo(state, action) {
-      const studentInfo = action.payload;
-      return { ...state, studentInfo, isNew: true };
-    },
-    logout(state) {
-      localStorage.clear();
-      return { ...state, ...initialState };
-    },
-    setOld(state) {
-      return { ...state, isNew: false };
-    },
+    startLoading: utility.startLoading,
+    endLoading: utility.endLoading,
+    create: utility.create,
+    saveStudentInfo: utility.saveUserInfo,
+    logout: utility.logout,
+    setOld: utility.setOld,
   },
 });
 

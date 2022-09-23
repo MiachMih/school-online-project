@@ -21,7 +21,7 @@ function Student() {
   */
 
   const dispatch = useDispatch();
-  const student = useSelector((state) => state.student.studentInfo);
+  const student = useSelector((state) => state.student.userInfo);
   const isNew = useSelector((state) => state.student.isNew);
   const isLoading = useSelector((state) => state.student.loading);
   const navigate = useNavigate();

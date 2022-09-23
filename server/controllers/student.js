@@ -106,7 +106,8 @@ exports.signupStudent = async (req, res, next) => {
       honors_classes_taken: 0,
       detention_count: 0,
       GPA: 4,
-    }).lean();
+    });
+    const result = { ...student, password: password };
 
     const token = jwt.sign(
       { email, password, id: result._id },
@@ -114,7 +115,6 @@ exports.signupStudent = async (req, res, next) => {
       { expiresIn: "2h" }
     );
 
-    const result = { ...student, password: password };
     return res.status(201).json({ result, token });
   } catch (error) {
     console.log(error);
@@ -122,6 +122,8 @@ exports.signupStudent = async (req, res, next) => {
   }
 };
 
+// TODO: transport this validate function to user controller
+// as well as create user route
 exports.validate = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {

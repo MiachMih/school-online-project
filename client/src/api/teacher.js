@@ -11,3 +11,13 @@ API.interceptors.request.use((req) => {
 
   return req;
 });
+
+export const fetchTeacher = async () => API.get(`/teacher/profile`);
+
+export const updateTeacher = async (updateData) =>
+  API.put("/teacher/profile", updateData);
+
+export const loginTeacher = async (loginData) =>
+  API.post("/teacher/login", loginData);
+export const signUpTeacher = async (signUpData) =>
+  API.post("/teacher/signup", signUpData);

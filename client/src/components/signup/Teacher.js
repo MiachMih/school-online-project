@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Student.module.css";
+import { signUpTeacher } from "../../store/teacher-slice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Form, { Title, Text, Email, Number, Password } from "../form/Form";
@@ -11,6 +12,7 @@ function Teacher() {
 
   async function submitHandler(e) {
     e.preventDefault();
+    dispatch(signUpTeacher(form, navigate));
   }
 
   function changeHandler(e) {

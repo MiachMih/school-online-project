@@ -5,6 +5,7 @@ import bg from "../../assets/galaxy-night-view.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginStudent, validate } from "../../store/student-slice";
+import { loginTeacher } from "../../store/teacher-slice";
 import Form, { Email, Password, Title } from "../form/Form";
 
 //TODO: fetch the background image from an API
@@ -25,6 +26,7 @@ function Login() {
   const isLoading = useSelector((state) => state.student.loading);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isStudentTeacher, setIsStudentTeacher] = useState(true);
 
   useEffect(() => {
     dispatch(validate(navigate));
@@ -32,7 +34,11 @@ function Login() {
 
   function submitHandler(e) {
     e.preventDefault();
-    dispatch(loginStudent(loginData, navigate));
+    if (isStudentTeacher) {
+      dispatch(loginStudent(loginData, navigate));
+    } else {
+      dispatch(loginTeacher(loginData, navigate));
+    }
   }
 
   function changeHandler(e) {
@@ -46,7 +52,18 @@ function Login() {
   return (
     <Container bg={bg}>
       <div id="hi" className={styles.content}>
-        <Title>Welcome</Title>
+        <button
+          onClick={() => {
+            setIsStudentTeacher((state) => !state);
+          }}
+        >
+          Switch
+        </button>
+        {isStudentTeacher ? (
+          <Title>Student Login</Title>
+        ) : (
+          <Title>Teacher Login</Title>
+        )}
         <Form onSubmit={submitHandler} btnName="Login">
           <Email onChange={changeHandler} name="email">
             Email
