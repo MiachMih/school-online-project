@@ -23,7 +23,7 @@ const Container = styled.div`
 
 function Login() {
   const [loginData, setLoginData] = useState({});
-  const isLoading = useSelector((state) => state.student.loading);
+  const isLoading = useSelector((state) => state.user.loading);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isStudentTeacher, setIsStudentTeacher] = useState(true);

@@ -1,14 +1,14 @@
 import React from "react";
 import Nav, { Li, Ul, Sidebar, Content } from "../navbar/Nav";
 import { useDispatch } from "react-redux";
-import { studentActions } from "../../store/student-slice";
+import { userActions } from "../../store/user-slice";
 import { CgProfile } from "react-icons/cg";
 
 function StudentNav(props) {
   const dispatch = useDispatch();
 
   function logoutHandler() {
-    dispatch(studentActions.logout());
+    dispatch(userActions.logout());
   }
 
   return (

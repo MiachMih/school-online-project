@@ -9,7 +9,7 @@ import Teacher from "./Teacher";
 function General() {
   // TODO: change the validate to check both teachers and students
 
-  const isLoading = useSelector((state) => state.student.loading);
+  const isLoading = useSelector((state) => state.user.loading);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

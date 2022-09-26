@@ -11,9 +11,9 @@ import Nav from "./TeacherNav";
 
 function Teacher() {
   const dispatch = useDispatch();
-  const teacher = useSelector((state) => state.teacher.userInfo);
-  const isNew = useSelector((state) => state.teacher.isNew);
-  const isLoading = useSelector((state) => state.teacher.loading);
+  const teacher = useSelector((state) => state.user.userInfo);
+  const isNew = useSelector((state) => state.user.isNew);
+  const isLoading = useSelector((state) => state.user.loading);
   const navigate = useNavigate();
 
   useEffect(() => {
