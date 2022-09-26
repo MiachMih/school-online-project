@@ -63,3 +63,12 @@
   background-color: var(--btn-focus-color);
   transition: var(--transition);
 }
+
+.schedule {
+  display: flex;
+  gap: 1em;
+}
+
+.schedule .inputs input:focus {
+  box-shadow: none;
+}

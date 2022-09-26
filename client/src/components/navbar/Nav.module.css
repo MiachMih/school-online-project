@@ -76,7 +76,7 @@
 }
 
 /* a less-than sign at the end of the container < */
-.navigation li > .btn:after {
+.navigation li > .nested:after {
   content: "\003C";
   font-size: 1em;
   width: 10px;

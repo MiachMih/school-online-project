@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Form.module.css";
+import { Dropdown as SemanticDropdown } from "semantic-ui-react";
 
 export function Title(props) {
   return <h1 className={styles.title}>{props.children}</h1>;
@@ -32,6 +33,26 @@ export function Option(props) {
   return <option value={value}>{props.children}</option>;
 }
 
+export const Dropdown = React.forwardRef((props, ref) => {
+  const { name } = props;
+  return (
+    <div className={styles.inputs}>
+      <label htmlFor={name}>{props.children}</label>
+      <SemanticDropdown
+        ref={ref}
+        placeholder="None"
+        additionPosition="bottom"
+        onChange={props.onChange}
+        fluid
+        multiple
+        search
+        selection
+        options={props.options}
+      />
+    </div>
+  );
+});
+
 export function Number(props) {
   const { name } = props;
   return (
@@ -40,6 +61,20 @@ export function Number(props) {
       <input type="number" name={name} onChange={props.onChange} />
     </div>
   );
+}
+
+export function Checkbox(props) {
+  const { name } = props;
+  return (
+    <div className={styles.inputs}>
+      <label htmlFor={name}>{props.children}</label>
+      <input type="checkbox" name={name} onChange={props.onChange} />
+    </div>
+  );
+}
+
+export function Schedule(props) {
+  return <div className={styles.schedule}>{props.children}</div>;
 }
 
 export function Text(props) {
