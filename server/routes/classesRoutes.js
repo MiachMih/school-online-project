@@ -15,9 +15,11 @@ router.put(
 );
 router.get("/get-class-password", auth, classesController.getClassPassword);
 router.get(
-  "/get-all-prerequisites",
+  "/get-class-prerequisites",
   auth,
-  classesController.getAllPrerequisites
+  classesController.getClassPrerequisites
 );
+
+router.get("/get-classes-names", auth, classesController.getClassesNames);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const Classes = require("../models/classes");
 const Student = require("../models/student");
 const bcrypt = require("bcryptjs");
 
-// TODO: make pagination here
+// TODO: make pagination here for students
 exports.getClasses = async (req, res, next) => {
   try {
     const result = await Classes.find(
@@ -17,9 +17,25 @@ exports.getClasses = async (req, res, next) => {
   }
 };
 
-exports.getAllPrerequisites = async (req, res, next) => {
+exports.getClassesNames = async (req, res, next) => {
   try {
-    const result = await Classes.find({}, "class_prerequisites").lean();
+    const result = await Classes.find({}, "class_name").lean();
+    return res.status(200).json({ result });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
+exports.getClassById = async (req, res, next) => {
+  const id = req.userId;
+  try {
+  } catch (error) {}
+};
+
+exports.getClassPrerequisites = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const result = await Classes.find({ id }, "class_prerequisites").lean();
     return res.status(200).json({ result });
   } catch (error) {
     return res.status(404).json({ message: error.message });
@@ -27,7 +43,7 @@ exports.getAllPrerequisites = async (req, res, next) => {
 };
 
 exports.addStudentToClassByPassword = async (req, res, next) => {
-  const id = userId;
+  const id = req.userId;
   const class_password = req.body?.classPassword;
   try {
     const { name: student_name } = await Student.findById(id);
@@ -58,7 +74,7 @@ exports.addStudentToClassByPassword = async (req, res, next) => {
 };
 
 exports.addStudentToClass = async (req, res, next) => {
-  const id = userId;
+  const id = req.serId;
   try {
     //TODO: check prerequisites
     // if doesn't qualify then send status 403 not allowed to register for this class
@@ -98,6 +114,8 @@ exports.addNewClass = async (req, res, next) => {
     if (!req.body?.password) {
       // generates random number with length of 5
       // does not contain zeroes
+
+      // TODO: store the actual password somewhere
       password = passwordGenerator.generate({
         length: 5,
         numbers: true,
@@ -109,16 +127,16 @@ exports.addNewClass = async (req, res, next) => {
       password = req.body.password;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
+    //TODO implement mongoose-unique-validator
+    // so that the app doesn't break on error
     const result = Classes.create({
       class_name,
       teacher_name,
       class_description,
       class_prerequisites,
       schedule,
-      password: hashedPassword,
-    }).lean();
+      password,
+    });
 
     return res.status(200).json({ result });
   } catch (error) {

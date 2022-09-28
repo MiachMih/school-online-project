@@ -8,9 +8,11 @@ const classesSchema = new Schema({
     unique: true,
   },
   teacher_name: String,
-  student_list: [{ student_name: String, student_id: String }],
+  student_list: [{ student_name: String, student_id: String, _id: false }],
   class_description: String,
-  class_prerequisites: [{ class_name: String }],
+  class_prerequisites: [
+    { class_id: String, prerequisite_class_name: String, _id: false },
+  ],
   schedule: {
     Monday: Boolean,
     Tuesday: Boolean,
