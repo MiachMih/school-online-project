@@ -14,3 +14,7 @@ export function newClass(data) {
     } catch (error) {}
   };
 }
+
+export function updateClass(data) {
+  return async (dispatch) => {};
+}

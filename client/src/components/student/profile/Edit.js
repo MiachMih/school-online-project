@@ -17,9 +17,9 @@ function Edit(props) {
             value={edit.name}
           />
         </div>
-      </div>
+      </div> */}
 
-      <div className={styles["info-field"]}>
+      {/* <div className={styles["info-field"]}>
         <div className={styles.label}>
           <span>Age</span>
         </div>
