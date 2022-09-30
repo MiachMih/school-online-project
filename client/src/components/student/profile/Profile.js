@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import View from "./View";
-import Edit from "./Edit";
 import styles from "./Profile.module.css";
 import { useDispatch } from "react-redux";
 import { updateStudent } from "../../../store/student-slice";
+import Card, { Editable, View } from "../../form/Profile";
 
 function Profile(props) {
   const dispatch = useDispatch();
@@ -23,63 +22,41 @@ function Profile(props) {
     dispatch(updateStudent(edit));
   }
 
+  const editable_list = [
+    { label: "Name", name: "name", type: "text" },
+    { label: "Age", name: "age", type: "number" },
+    { label: "Email", name: "email", type: "email" },
+    { label: "Password", name: "password", type: "text" },
+    { label: "Address", name: "address", type: "text" },
+  ];
+
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
-        <div className={styles["card-body"]}>
-          <div className={styles["info-field"]}>
-            <div className={styles.label}>
-              <span>ID</span>
-            </div>
-            <div className={styles.info}>
-              <span>{student._id}</span>
-            </div>
-          </div>
-          {viewEditSwitch ? (
-            <View styles={styles} student={student} />
-          ) : (
-            <Edit editHandler={editHandler} styles={styles} edit={edit} />
-          )}
+      <Card
+        onClick={toggleHandler}
+        onSave={saveHandler}
+        viewEditSwitch={viewEditSwitch}
+      >
+        <View label="ID">{student._id}</View>
 
-          <div className={styles["info-field"]}>
-            <div className={styles.label}>
-              <span>GPA</span>
-            </div>
-            <div className={styles.info}>
-              <span>{student.GPA}</span>
-            </div>
-          </div>
+        {editable_list.map((item, index) => {
+          return (
+            <Editable
+              key={index}
+              viewEditSwitch={viewEditSwitch}
+              label={item.label}
+              name={item.name}
+              type={item.type}
+              edit={edit}
+              onChange={editHandler}
+            />
+          );
+        })}
 
-          <div className={styles["info-field"]}>
-            <div className={styles.label}>
-              <span>Class Grade</span>
-            </div>
-            <div className={styles.info}>
-              <span>{student.class_grade}</span>
-            </div>
-          </div>
-
-          <div className={styles["info-field"]}>
-            <div className={styles.label}>
-              <span>Honors Classes Taken</span>
-            </div>
-            <div className={styles.info}>
-              <span>{student.honors_classes_taken}</span>
-            </div>
-          </div>
-          <div className={styles["info-field"]}>
-            <button className={styles.btn} onClick={toggleHandler}>
-              Edit
-            </button>
-
-            {!viewEditSwitch && (
-              <button className={styles.btn} onClick={saveHandler}>
-                Save
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+        <View label="GPA">{student.GPA}</View>
+        <View label="Class Grade">{student.class_grade}</View>
+        <View label="Honors Classes Taken">{student.honors_classes_taken}</View>
+      </Card>
     </div>
   );
 }
