@@ -23,6 +23,7 @@ const classesSchema = new Schema({
     Sunday: Boolean,
   },
   password: String,
+  subject: String,
 });
 
 module.exports = mongoose.model("Classes", classesSchema);

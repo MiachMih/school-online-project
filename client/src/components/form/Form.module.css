@@ -58,8 +58,7 @@
   cursor: pointer;
 }
 
-.btn:hover,
-.btn:focus {
+.btn:hover {
   background-color: var(--btn-focus-color);
   transition: var(--transition);
 }

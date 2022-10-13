@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import styles from "./Profile.module.css";
 
 export function View(props) {
@@ -53,7 +54,7 @@ export function Editable(props) {
   );
 }
 
-function Card(props) {
+export function BasicCard(props) {
   const { viewEditSwitch } = props;
   return (
     <div className={`${styles.card} ${styles["card-body"]}`}>
@@ -69,6 +70,62 @@ function Card(props) {
         )}
       </div>
     </div>
+  );
+}
+
+function Card(props) {
+  const { profile_data, editable_list = [], view_list = [] } = props;
+  const [viewEditSwitch, setViewEditSwitch] = useState(true);
+  const [edit, setEdit] = useState({ ...profile_data });
+  const dispatch = useDispatch();
+  function editHandler(e) {
+    return setEdit({ ...edit, [e.target.name]: e.target.value });
+  }
+
+  useEffect(() => {
+    setEdit({ ...profile_data });
+  }, [profile_data]);
+
+  function toggleHandler() {
+    setViewEditSwitch((state) => {
+      return !state;
+    });
+    setEdit({ ...profile_data });
+  }
+
+  function saveHandler() {
+    dispatch(props.saveHandler(edit));
+  }
+
+  return (
+    <BasicCard
+      onClick={toggleHandler}
+      onSave={saveHandler}
+      viewEditSwitch={viewEditSwitch}
+    >
+      {profile_data &&
+        view_list.map((item, index) => {
+          return (
+            <View key={index} label={item.label}>
+              {profile_data[item.name]}
+            </View>
+          );
+        })}
+      {profile_data &&
+        editable_list.map((item, index) => {
+          return (
+            <Editable
+              key={index}
+              viewEditSwitch={viewEditSwitch}
+              label={item.label}
+              name={item.name}
+              type={item.type}
+              edit={edit}
+              onChange={editHandler}
+            />
+          );
+        })}
+    </BasicCard>
   );
 }
 

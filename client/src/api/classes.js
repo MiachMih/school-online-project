@@ -12,7 +12,17 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const getClasses = async () => API.get("/classes/get-classes");
+export const getClasses = async (params, query) =>
+  API.get(`/classes/get-classes/${params}?${query}`);
 export const newClass = async (data) => API.post("/classes/new-class", data);
+export const updateClass = async (data) =>
+  API.put("/classes/update-class", data);
 export const getClassesNames = async () =>
   API.get("/classes/get-classes-names");
+export const getSubjects = async () => API.get("/subject/get-subjects");
+export const addSubject = async (data) =>
+  API.post("/subject/add-subject", data);
+export const addStudentToClass = async (data) =>
+  API.put("/classes/add-student-to-class", data);
+export const getClassById = async (params) =>
+  API.get(`/classes/get-class-by-id/${params.id}`);

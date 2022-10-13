@@ -19,7 +19,8 @@ function StudentNav(props) {
         </Li>
         <Ul text="Manage Classes" icon={CgProfile}>
           <Li to="/student/schedule">Schedule</Li>
-          <Li to="/student/edit-classes">Add/Drop Classes</Li>
+          <Li to="/student/add-classes">Add Classes</Li>
+          <Li to="/student/drop-classes">Drop Classes</Li>
           <Li to="/student/history">My History</Li>
         </Ul>
         <Li to="/student/billing" icon={CgProfile}>

@@ -3,14 +3,13 @@ const passwordGenerator = require("generate-password");
 const Classes = require("../models/classes");
 const Student = require("../models/student");
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 
 // TODO: make pagination here for students
 exports.getClasses = async (req, res, next) => {
+  const result = res.result;
   try {
-    const result = await Classes.find(
-      {},
-      "class_name teacher_name student_list class_description class_prerequisites schedule"
-    ).lean();
+    // console.log(result);
     return res.status(200).json({ result });
   } catch (error) {
     return res.status(404).json({ message: error.message });
@@ -27,15 +26,59 @@ exports.getClassesNames = async (req, res, next) => {
 };
 
 exports.getClassById = async (req, res, next) => {
-  const id = req.userId;
+  const { id } = req.params;
   try {
-  } catch (error) {}
+    const result = await Classes.findById(id).lean();
+    return res.status(200).json({ result });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
+exports.updateClass = async (req, res, next) => {
+  const {
+    _id: id,
+    teacher_name,
+    class_prerequisites,
+    class_description,
+    schedule,
+    subject,
+  } = req.body;
+
+  try {
+    const filter = class_prerequisites.map((item) => {
+      return { _id: item };
+    });
+    const new_class_prerequisites = await Classes.find({}, "class_name")
+      .or(filter)
+      .lean();
+    const refactor_class_prerequisites = new_class_prerequisites.map((item) => {
+      return { class_id: item._id, prerequisite_class_name: item.class_name };
+    });
+
+    await Classes.updateOne(
+      { _id: id },
+      {
+        teacher_name,
+        class_description,
+        schedule,
+        subject,
+        class_prerequisites: refactor_class_prerequisites,
+      }
+    );
+    res.status(200).json({ message: "succ" });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 exports.getClassPrerequisites = async (req, res, next) => {
+  const { id } = req.body;
   try {
-    const { id } = req.body;
-    const result = await Classes.find({ id }, "class_prerequisites").lean();
+    const result = await Classes.find(
+      { _id: id },
+      "class_prerequisites"
+    ).lean();
     return res.status(200).json({ result });
   } catch (error) {
     return res.status(404).json({ message: error.message });
@@ -74,20 +117,105 @@ exports.addStudentToClassByPassword = async (req, res, next) => {
 };
 
 exports.addStudentToClass = async (req, res, next) => {
-  const id = req.serId;
+  const { id } = req.body;
+  const student_id = req.userId;
+  // TODO: make a session so that everything gets updated in every place appropriately
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  // make sure to pass session to each database request
+
   try {
-    //TODO: check prerequisites
-    // if doesn't qualify then send status 403 not allowed to register for this class
-    // if all checks out then update student_list with new student
-  } catch (error) {}
+    if (!id) {
+      res.status(400).json({ message: "no class id" });
+    }
+
+    // check if the student is already enrolled in the class
+    const isEnrolled = await Classes.exists({
+      _id: id,
+      student_list: { $elemMatch: { student_id: student_id } },
+    });
+
+    if (isEnrolled) {
+      session.endSession();
+      return res.status(200).json({ message: "student already enrolled" });
+    }
+
+    // check that student has all the prerequisites
+    const student = await Student.findById(student_id).lean();
+    const student_class = await Classes.findById(id).lean();
+    const checkMap = new Map();
+    for (const item of student.previous_subjects_taken) {
+      checkMap.set(item.subject_name, true);
+    }
+
+    for (const item of student_class.class_prerequisites) {
+      if (!checkMap.has(item)) {
+        session.endSession();
+        return res
+          .status(403)
+          .json({ message: "student doesn't have all the prerequisites" });
+      }
+    }
+
+    // Update the student list with the new student added to class
+    const newStudentList = [
+      ...student_class.student_list,
+      { student_name: student.name, student_id: student._id },
+    ];
+
+    const response = await Classes.updateOne(
+      { _id: id },
+      { student_list: newStudentList }
+    );
+
+    // update the student's registered next year classes
+    const newClassCart = [
+      ...student.registering_next_year_classes,
+      {
+        class_id: id,
+        subject_name: student_class.class_name,
+        teacher_name: student_class.teacher_name,
+      },
+    ];
+
+    await Student.updateOne(
+      { _id: student_id },
+      { registering_next_year_classes: newClassCart }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+    res.status(200).json({ result: response });
+  } catch (error) {
+    await session.abortTransaction();
+    res.status(404).json({ message: error.message });
+  }
 };
 
-// TODO: return the class password
-// TODO: authorize only to teacher and admin roles
-exports.getClassPassword = async (req, res, next) => {};
+exports.dropStudentFromClass = async (req, res, next) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  session.endSession();
+  // TODO make sure to pass session to each database request
+  try {
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+  }
+};
 
-// TODO: restrict this method to admin and teacher roles
-// TODO: create new auth middleware for admins specifically
+// returns the class password
+exports.getClassPassword = async (req, res, next) => {
+  const { id } = req.body;
+  try {
+    const result = await Classes.find({ _id: id }, "password").lean();
+    res.status(200).json({ result });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 exports.addNewClass = async (req, res, next) => {
   try {
     const {
@@ -96,6 +224,7 @@ exports.addNewClass = async (req, res, next) => {
       class_description,
       class_prerequisites,
       schedule,
+      subject,
     } = req.body;
 
     let password;
@@ -105,7 +234,8 @@ exports.addNewClass = async (req, res, next) => {
         teacher_name &&
         class_description &&
         class_prerequisites &&
-        schedule
+        schedule &&
+        subject
       )
     ) {
       return res.status(400).json({ message: "All inputs are required" });
@@ -115,7 +245,6 @@ exports.addNewClass = async (req, res, next) => {
       // generates random number with length of 5
       // does not contain zeroes
 
-      // TODO: store the actual password somewhere
       password = passwordGenerator.generate({
         length: 5,
         numbers: true,
@@ -136,6 +265,7 @@ exports.addNewClass = async (req, res, next) => {
       class_prerequisites,
       schedule,
       password,
+      subject,
     });
 
     return res.status(200).json({ result });

@@ -7,6 +7,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./profile/Profile";
 import CreateClass from "./create-class/CreateClass";
 import EditClass from "./edit-classes/Edit";
+import AddSubject from "./add-subject/AddSubject";
 import Nav from "./TeacherNav";
 
 function Teacher() {
@@ -32,6 +33,7 @@ function Teacher() {
             <Route path="/profile" element={<Profile teacher={teacher} />} />
             <Route path="/edit-classes" element={<EditClass />} />
             <Route path="/create-class" element={<CreateClass />} />
+            <Route path="/add-subject" element={<AddSubject />} />
           </Routes>
         )}
       </Nav>

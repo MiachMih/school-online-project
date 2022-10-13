@@ -9,7 +9,8 @@ import Profile from "./profile/Profile";
 import Billing from "./billing/Billing";
 import Announcement from "./announcement/Announcement";
 import Schedule from "./schedule/Schedule";
-import EditClasses from "./edit-classes/EditClasses";
+import AddClasses from "./add-classes/AddClasses";
+import DropClasses from "./drop-classes/DropClasses";
 import Nav from "./StudentNav";
 
 function Student() {
@@ -45,7 +46,8 @@ function Student() {
             <Route path="/billing" element={<Billing />} />
             <Route path="/announcement" element={<Announcement />} />
             <Route path="/schedule" element={<Schedule />} />
-            <Route path="/edit-classes" element={<EditClasses />} />
+            <Route path="/add-classes/*" element={<AddClasses />} />
+            <Route path="/drop-classes" element={<DropClasses />} />
           </Routes>
         )}
       </Nav>

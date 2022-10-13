@@ -1,20 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./CreateClass.module.css";
 import { useDispatch } from "react-redux";
-import { newClass, fetchClassesNames } from "../../../store/classes-slice";
+import {
+  newClass,
+  fetchClassesNames,
+  fetchSubjects,
+} from "../../../store/classes-slice";
 import Form, {
   Title,
   Text,
   Dropdown,
   Checkbox,
   Schedule,
+  SingleDropdown,
 } from "../../form/Form";
 
 function CreateClass(props) {
-  const prerequisitesRef = useRef();
-  const [classesList, setClassesList] = useState([{}]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [form, setForm] = useState({
+  const initialState = {
     class_name: "",
     teacher_name: "",
     class_description: "",
@@ -27,7 +29,14 @@ function CreateClass(props) {
       Saturday: false,
       Sunday: false,
     },
-  });
+  };
+  const prerequisitesRef = useRef();
+  const subjectRef = useRef();
+  const formRef = useRef();
+  const [classesList, setClassesList] = useState([{}]);
+  const [subjectsList, setSubjectsList] = useState([{}]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [form, setForm] = useState(initialState);
   const dispatch = useDispatch();
 
   function submitHandler(e) {
@@ -36,14 +45,17 @@ function CreateClass(props) {
       const [class_id, prerequisite_class_name] = item.split(",");
       return { class_id, prerequisite_class_name };
     });
+    const subject = subjectRef.current.state.value;
     const data = {
       class_name: form.class_name,
       teacher_name: form.teacher_name,
       class_description: form.class_description,
       class_prerequisites: prerequisites,
       schedule: form.schedule,
+      subject: subject,
     };
     dispatch(newClass(data));
+    setForm(initialState);
   }
 
   useEffect(() => {
@@ -57,10 +69,19 @@ function CreateClass(props) {
         };
       });
       setClassesList(result);
+      const subjectsResponse = await dispatch(fetchSubjects());
+      const subjectsResult = subjectsResponse.map((item) => {
+        return {
+          key: item.name,
+          text: item.name,
+          value: item.name,
+        };
+      });
+      setSubjectsList(subjectsResult);
       setIsLoading(false);
     };
     getClassesNames();
-  }, []);
+  }, [dispatch]);
 
   function changeHandler(e) {
     setForm((state) => {
@@ -81,9 +102,13 @@ function CreateClass(props) {
     return <div>Loading...</div>;
   }
 
+  //TODO: simplify this
+  // TODO: change into fully controlled component
+  // aka eliminate the refs
+
   return (
     <div className={styles.container}>
-      <Form onSubmit={submitHandler} btnName="create">
+      <Form onSubmit={submitHandler} btnName="create" ref={formRef}>
         <Title>Create Class</Title>
         <Text onChange={changeHandler} name="class_name">
           Class Name
@@ -94,6 +119,9 @@ function CreateClass(props) {
         <Text onChange={changeHandler} name="class_description">
           Class Description
         </Text>
+        <SingleDropdown ref={subjectRef} options={subjectsList}>
+          Subject
+        </SingleDropdown>
         <Dropdown ref={prerequisitesRef} options={classesList}>
           Prerequisites
         </Dropdown>

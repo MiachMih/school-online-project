@@ -6,6 +6,16 @@ export function Title(props) {
   return <h1 className={styles.title}>{props.children}</h1>;
 }
 
+export function Input(props) {
+  const { name, type, value } = props;
+  return (
+    <div className={`${styles.inputs}`}>
+      <label htmlFor={name}>{props.children}</label>
+      <input type={type} name={name} onChange={props.onChange} value={value} />
+    </div>
+  );
+}
+
 export function Password(props) {
   const { name } = props;
   return (
@@ -53,6 +63,64 @@ export const Dropdown = React.forwardRef((props, ref) => {
   );
 });
 
+export const DynamicDropdown = React.forwardRef((props, ref) => {
+  const { name, value = [] } = props;
+  return (
+    <div className={styles.inputs}>
+      <label htmlFor={name}>{props.children}</label>
+      <SemanticDropdown
+        ref={ref}
+        placeholder="None"
+        additionPosition="bottom"
+        onChange={props.onChange}
+        fluid
+        multiple
+        search
+        value={value}
+        selection
+        options={props.options}
+      />
+    </div>
+  );
+});
+
+export const DynamicSingleDropdown = React.forwardRef((props, ref) => {
+  const { name, value = "" } = props;
+  return (
+    <div className={styles.inputs}>
+      <label htmlFor={name}>{props.children}</label>
+      <SemanticDropdown
+        ref={ref}
+        placeholder="None"
+        additionPosition="bottom"
+        onChange={props.onChange}
+        search
+        selection
+        value={value}
+        options={props.options}
+      />
+    </div>
+  );
+});
+
+export const SingleDropdown = React.forwardRef((props, ref) => {
+  const { name } = props;
+  return (
+    <div className={styles.inputs}>
+      <label htmlFor={name}>{props.children}</label>
+      <SemanticDropdown
+        ref={ref}
+        placeholder="None"
+        additionPosition="bottom"
+        onChange={props.onChange}
+        search
+        selection
+        options={props.options}
+      />
+    </div>
+  );
+});
+
 export function Number(props) {
   const { name } = props;
   return (
@@ -78,11 +146,11 @@ export function Schedule(props) {
 }
 
 export function Text(props) {
-  const { name } = props;
+  const { name, value } = props;
   return (
     <div className={`${styles.inputs}`}>
       <label htmlFor={name}>{props.children}</label>
-      <input type="text" name={name} onChange={props.onChange} />
+      <input type="text" name={name} onChange={props.onChange} value={value} />
     </div>
   );
 }
@@ -97,16 +165,16 @@ export function Email(props) {
   );
 }
 
-function Form(props) {
+const Form = React.forwardRef((props, ref) => {
   const { btnName } = props;
   return (
-    <form onSubmit={props.onSubmit} className={styles.form}>
+    <form ref={ref} onSubmit={props.onSubmit} className={styles.form}>
       {props.children}
       <button className={styles.btn} type="submit">
         {btnName}
       </button>
     </form>
   );
-}
+});
 
 export default Form;
