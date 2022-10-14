@@ -2,6 +2,16 @@ import { userActions } from "./user-slice";
 
 import * as api from "../api/student";
 
+export const updateRegisteringClasses = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch(userActions.startLoading());
+      const studentInfo = await api.removeStudentFromClass(data);
+      dispatch(userActions.saveUserInfo(studentInfo.data.result));
+    } catch (error) {}
+  };
+};
+
 export const updateStudent = (data) => {
   return async (dispatch) => {
     try {
@@ -11,6 +21,15 @@ export const updateStudent = (data) => {
     } catch (error) {}
   };
 };
+
+export function enrollStudentToClass(data) {
+  return async (dispatch) => {
+    try {
+      const studentInfo = await api.addStudentToClass(data);
+      dispatch(userActions.saveUserInfo(studentInfo.data.result));
+    } catch (error) {}
+  };
+}
 
 export const fetchStudent = (navigate) => {
   return async (dispatch) => {

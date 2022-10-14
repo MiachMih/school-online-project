@@ -28,7 +28,11 @@ router.get(
   auth,
   classesController.getClassPrerequisites
 );
-
+router.put(
+  "/remove-student-from-class",
+  auth,
+  classesController.dropStudentFromClass
+);
 router.get("/get-classes-names", auth, classesController.getClassesNames);
 
 module.exports = router;

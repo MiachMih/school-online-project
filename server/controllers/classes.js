@@ -167,7 +167,7 @@ exports.addStudentToClass = async (req, res, next) => {
     const response = await Classes.updateOne(
       { _id: id },
       { student_list: newStudentList }
-    );
+    ).session(session);
 
     // update the student's registered next year classes
     const newClassCart = [
@@ -182,7 +182,7 @@ exports.addStudentToClass = async (req, res, next) => {
     await Student.updateOne(
       { _id: student_id },
       { registering_next_year_classes: newClassCart }
-    );
+    ).session(session);
 
     await session.commitTransaction();
     session.endSession();
@@ -194,14 +194,54 @@ exports.addStudentToClass = async (req, res, next) => {
 };
 
 exports.dropStudentFromClass = async (req, res, next) => {
+  const { remove_classes_id } = req.body;
+  const student_id = req.userId;
+
   const session = await mongoose.startSession();
   session.startTransaction();
-  session.endSession();
   // TODO make sure to pass session to each database request
+  const filter = remove_classes_id.map((id) => {
+    return { class_id: id };
+  });
+  const class_filter = remove_classes_id.map((id) => {
+    return { _id: id };
+  });
+
   try {
+    await Student.updateOne(
+      { _id: student_id },
+      {
+        $pull: {
+          registering_next_year_classes: {
+            $or: filter,
+          },
+        },
+      }
+    )
+      .session(session)
+      .lean();
+
+    await Classes.updateMany(
+      { $or: class_filter },
+      {
+        $pull: {
+          student_list: {
+            student_id: student_id,
+          },
+        },
+      }
+    )
+      .session(session)
+      .lean();
+
+    const student = await Student.findById(student_id);
+    const result = { ...student };
     await session.commitTransaction();
+    session.endSession();
+    res.status(200).json({ result: result });
   } catch (error) {
     await session.abortTransaction();
+    res.status(404).json({ message: error.message });
   }
 };
 

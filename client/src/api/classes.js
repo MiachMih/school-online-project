@@ -22,7 +22,5 @@ export const getClassesNames = async () =>
 export const getSubjects = async () => API.get("/subject/get-subjects");
 export const addSubject = async (data) =>
   API.post("/subject/add-subject", data);
-export const addStudentToClass = async (data) =>
-  API.put("/classes/add-student-to-class", data);
 export const getClassById = async (params) =>
   API.get(`/classes/get-class-by-id/${params.id}`);

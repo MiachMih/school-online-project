@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./DisplayClass.module.css";
 import { useDispatch } from "react-redux";
-import { enrollStudentToClass } from "../../../store/classes-slice";
+import { enrollStudentToClass } from "../../../store/student-slice";
 
 function DisplayClass(props) {
   const { result } = props;

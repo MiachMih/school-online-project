@@ -20,6 +20,8 @@ export const signUpStudent = async (signUpData) =>
 export const validate = async () => API.get("/student/validate");
 export const updateStudent = async (updateData) =>
   API.put("/student/profile", updateData);
-
-// TODO : move getClasses to a classes api
+export const addStudentToClass = async (data) =>
+  API.put("/classes/add-student-to-class", data);
+export const removeStudentFromClass = async (data) =>
+  API.put("/classes/remove-student-from-class", data);
 export const getClasses = async () => API.get("/classes/get-classes");

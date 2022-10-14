@@ -43,15 +43,6 @@ export function fetchClassesBySubject(params, query) {
   };
 }
 
-export function enrollStudentToClass(data) {
-  return async (dispatch) => {
-    try {
-      const response = await api.addStudentToClass(data);
-      console.log(response.data.result);
-    } catch (error) {}
-  };
-}
-
 export function addSubject(data) {
   return async (dispatch) => {
     try {
