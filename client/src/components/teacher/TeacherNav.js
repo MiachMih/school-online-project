@@ -25,6 +25,9 @@ function TeacherNav(props) {
         <Li to="/teacher/add-subject" icon={CgProfile}>
           Add Subject
         </Li>
+        <Li to="/teacher/announcement" icon={CgProfile}>
+          Announcement
+        </Li>
         <Li onClick={logoutHandler} to="/login" icon={CgProfile}>
           Logout
         </Li>

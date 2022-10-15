@@ -1,20 +1,42 @@
 import React from "react";
 import styles from "./Form.module.css";
 import { Dropdown as SemanticDropdown } from "semantic-ui-react";
+import FileBase from "react-file-base64";
 
 export function Title(props) {
   return <h1 className={styles.title}>{props.children}</h1>;
 }
 
-export function Input(props) {
+export const Input = React.forwardRef((props, ref) => {
   const { name, type, value } = props;
   return (
     <div className={`${styles.inputs}`}>
       <label htmlFor={name}>{props.children}</label>
-      <input type={type} name={name} onChange={props.onChange} value={value} />
+      <input
+        ref={ref}
+        type={type}
+        name={name}
+        onChange={props.onChange}
+        value={value}
+      />
     </div>
   );
-}
+});
+
+export const File = (props) => {
+  const { name } = props;
+  return (
+    <div className={`${styles.inputs}`}>
+      <label htmlFor={name}>{props.children}</label>
+      <FileBase
+        multiple={false}
+        onDone={({ base64 }) => {
+          props.setImg(base64);
+        }}
+      />
+    </div>
+  );
+};
 
 export function Password(props) {
   const { name } = props;
