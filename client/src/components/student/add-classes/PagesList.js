@@ -1,10 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Page from "./Page";
 
-function PagesList(props) {
-  const { maxPages } = props;
-
-  return <div>PagesList</div>;
+function PageList(props) {
+  const { pages_list, limit } = props;
+  return (
+    <div>
+      {pages_list.map((page) => {
+        return (
+          <Page
+            key={page}
+            page={page}
+            setSearchParams={props.setSearchParams}
+            limit={limit}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
-export default PagesList;
+export default PageList;

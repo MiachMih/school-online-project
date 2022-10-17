@@ -3,6 +3,7 @@ import { fetchClassesBySubject } from "../../../store/classes-slice";
 import { useDispatch } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import DisplayClass from "./DisplayClass";
+import PageList from "./PagesList";
 
 function SearchResults() {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ function SearchResults() {
   const [nextPageAvailable, setNextPageAvailable] = useState(true);
   const [previousPageAvailable, setPreviousPageAvailable] = useState(true);
   const [displayClasses, setDisplayClasses] = useState([]);
+  const pages_list = [...Array(maxPages).keys()];
 
   useEffect(() => {
     async function fetchData() {
@@ -56,6 +58,11 @@ function SearchResults() {
       SearchResults Current page: {parseInt(searchParams.get("page"), 10) + 1}
       <button onClick={previousPageHandler}>Previous Page</button>
       <button onClick={nextPageHandler}>Next Page</button>
+      <PageList
+        pages_list={pages_list}
+        limit={limit}
+        setSearchParams={setSearchParams}
+      />
     </div>
   );
 }

@@ -14,3 +14,9 @@ API.interceptors.request.use((req) => {
 
 export const createAnnouncement = async (data) =>
   API.post("/announcement/add-announcement", data);
+
+export const getAnnouncements = async (query) =>
+  API.get(`/announcement/get-announcements/?${query}`);
+
+export const getMaxPages = async (limit) =>
+  API.get(`/announcement/get-max-pages/?${limit}`);
