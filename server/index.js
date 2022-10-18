@@ -9,6 +9,7 @@ const classesRoutes = require("./routes/classesRoutes");
 const teacherRoutes = require("./routes/teacherRoutes");
 const subjectRoutes = require("./routes/subjectRoutes");
 const announcementRoutes = require("./routes/announcementRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -24,6 +25,7 @@ app.use("/classes", classesRoutes);
 app.use("/teacher", teacherRoutes);
 app.use("/subject", subjectRoutes);
 app.use("/announcement", announcementRoutes);
+app.use("/payment", paymentRoutes);
 
 mongoose
   .connect(CONNECTION_URL)

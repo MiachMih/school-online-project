@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 30vw;
+  min-width: 500px;
+  flex-wrap: wrap;
+}
+
+.container .btn {
+  font-size: 16px;
+  left: 0;
+  padding: 5px 30px;
+  width: auto;
+}
+
+.container .focus {
+  background: rgb(135, 187, 211);
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    min-width: 0;
+  }
+}
