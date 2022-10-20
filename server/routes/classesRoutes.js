@@ -1,4 +1,5 @@
 const classesController = require("../controllers/classes");
+const yearController = require("../controllers/year");
 const auth = require("../middleware/auth");
 const paginate = require("../middleware/paginate");
 const Classes = require("../models/classes");
@@ -28,11 +29,20 @@ router.get(
   auth,
   classesController.getClassPrerequisites
 );
+router.put("/start-year", auth, classesController.startYear);
 router.put(
   "/remove-student-from-class",
   auth,
   classesController.dropStudentFromClass
 );
 router.get("/get-classes-names", auth, classesController.getClassesNames);
+
+// Change year status
+router.get("/is-year-inprogress", auth, yearController.getIsYearInProgress);
+router.put(
+  "/toggle-year-inprogress",
+  auth,
+  yearController.toggleYearInProgress
+);
 
 module.exports = router;

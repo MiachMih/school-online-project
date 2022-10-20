@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { addSubject } from "../../../store/classes-slice";
 import { useDispatch } from "react-redux";
 import Form, { Text } from "../../form/Form";
-import styles from "./AddSubject.module.css";
+import { Container } from "../../form/Form";
 
 function AddSubject() {
   const dispatch = useDispatch();
@@ -19,13 +19,13 @@ function AddSubject() {
   }
 
   return (
-    <div className={styles.container}>
+    <Container>
       <Form btnName="Submit" onSubmit={submitHandler}>
         <Text name="name" onChange={changeHandler} value={name}>
           Subject Name
         </Text>
       </Form>
-    </div>
+    </Container>
   );
 }
 

@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import Form, { Input, File } from "../../form/Form";
 import { useDispatch } from "react-redux";
 import { addAnnouncement } from "../../../store/announcement-slice";
+import { Container } from "../../form/Form";
 
 function Announcement() {
   const [img, setImg] = useState("");
@@ -25,15 +26,17 @@ function Announcement() {
   }
 
   return (
-    <Form btnName="Submit" onSubmit={submitHandler}>
-      <Input ref={headRef} type="text">
-        Header
-      </Input>
-      <Input ref={msgRef} type="textarea">
-        Message
-      </Input>
-      <File setImg={setImg}>Picture</File>
-    </Form>
+    <Container>
+      <Form btnName="Submit" onSubmit={submitHandler}>
+        <Input ref={headRef} type="text">
+          Header
+        </Input>
+        <Input ref={msgRef} type="textarea">
+          Message
+        </Input>
+        <File setImg={setImg}>Picture</File>
+      </Form>
+    </Container>
   );
 }
 

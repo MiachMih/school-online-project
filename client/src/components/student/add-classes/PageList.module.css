@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.7em 0.4em;
+  width: 35px;
+  border-radius: 6px;
+  background: #103e66;
+  border: 1px solid #856969;
+  cursor: pointer;
+}
+
+.current {
+  color: rgb(9, 16, 36);
+  background: rgba(55, 164, 207, 0.452);
+}
+
+.raise:hover {
+  box-shadow: 0 0.5em 0.5em -0.4em rgb(0, 0, 0);
+  transform: translateY(-0.25em);
+  transition: var(--transition);
+}

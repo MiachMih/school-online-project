@@ -66,7 +66,7 @@ exports.updateClass = async (req, res, next) => {
         class_prerequisites: refactor_class_prerequisites,
       }
     );
-    res.status(200).json({ message: "succ" });
+    res.status(200).json({ message: "success" });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -135,14 +135,19 @@ exports.addStudentToClass = async (req, res, next) => {
       _id: id,
       student_list: { $elemMatch: { student_id: student_id } },
     });
+    const student = await Student.findById(student_id).lean();
 
     if (isEnrolled) {
       session.endSession();
-      return res.status(200).json({ message: "student already enrolled" });
+      return res
+        .status(200)
+        .json({
+          message: "student already enrolled",
+          result: { ...student, password: req.userPassword },
+        });
     }
 
     // check that student has all the prerequisites
-    const student = await Student.findById(student_id).lean();
     const student_class = await Classes.findById(id).lean();
     const checkMap = new Map();
     for (const item of student.previous_subjects_taken) {
@@ -150,7 +155,7 @@ exports.addStudentToClass = async (req, res, next) => {
     }
 
     for (const item of student_class.class_prerequisites) {
-      if (!checkMap.has(item)) {
+      if (!checkMap.has(item.prerequisite_class_name)) {
         session.endSession();
         return res
           .status(403)
@@ -255,6 +260,8 @@ exports.getClassPassword = async (req, res, next) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+exports.startYear = async (req, res, next) => {};
 
 exports.addNewClass = async (req, res, next) => {
   try {

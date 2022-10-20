@@ -14,8 +14,6 @@ function SearchResults() {
     limit: limit,
   });
   const [maxPages, setMaxPages] = useState(0);
-  const [nextPageAvailable, setNextPageAvailable] = useState(true);
-  const [previousPageAvailable, setPreviousPageAvailable] = useState(true);
   const [displayClasses, setDisplayClasses] = useState([]);
   const pages_list = [...Array(maxPages).keys()];
 
@@ -30,24 +28,6 @@ function SearchResults() {
     fetchData();
   }, [dispatch, params, searchParams]);
 
-  function previousPageHandler() {
-    const currentPage = parseInt(searchParams.get("page"), 10);
-    if (currentPage <= 0) {
-      return setPreviousPageAvailable(false);
-    }
-    setNextPageAvailable(true);
-    setSearchParams({ page: currentPage - 1, limit: limit });
-  }
-
-  function nextPageHandler() {
-    const currentPage = parseInt(searchParams.get("page"), 10);
-    if (currentPage >= maxPages - 1) {
-      return setNextPageAvailable(false);
-    }
-    setPreviousPageAvailable(true);
-    setSearchParams({ page: currentPage + 1, limit: limit });
-  }
-
   return (
     <div>
       <div>
@@ -55,10 +35,9 @@ function SearchResults() {
           return <DisplayClass key={item._id} result={item} />;
         })}
       </div>
-      SearchResults Current page: {parseInt(searchParams.get("page"), 10) + 1}
-      <button onClick={previousPageHandler}>Previous Page</button>
-      <button onClick={nextPageHandler}>Next Page</button>
+
       <PageList
+        currentPage={searchParams.get("page")}
         pages_list={pages_list}
         limit={limit}
         setSearchParams={setSearchParams}

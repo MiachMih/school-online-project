@@ -24,3 +24,8 @@ export const addSubject = async (data) =>
   API.post("/subject/add-subject", data);
 export const getClassById = async (params) =>
   API.get(`/classes/get-class-by-id/${params.id}`);
+
+export const getIsYearInProgress = async () =>
+  API.get("/classes/is-year-inprogress");
+export const toggleYearInProgress = async () =>
+  API.put("/classes/toggle-year-inprogress");

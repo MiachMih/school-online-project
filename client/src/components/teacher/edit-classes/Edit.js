@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Search from "./Search";
 import SearchResult from "./SearchResult";
+import { Container } from "../../form/Form";
 
 function Edit() {
   const [searchResult, setSearchResult] = useState(null);
 
   return (
-    <div>
+    <Container>
       <Search setSearchResult={setSearchResult} />
       {searchResult && (
         <SearchResult
@@ -14,7 +15,7 @@ function Edit() {
           setSearchResult={setSearchResult}
         />
       )}
-    </div>
+    </Container>
   );
 }
 

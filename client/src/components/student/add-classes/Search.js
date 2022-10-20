@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchSubjects } from "../../../store/classes-slice";
 import Form, { SingleDropdown } from "../../form/Form";
-import styles from "./Search.module.css";
 
 function Search() {
   const dispatch = useDispatch();
@@ -34,13 +33,11 @@ function Search() {
   }
 
   return (
-    <div className={styles.container}>
-      <Form btnName="Search" onSubmit={submitHandler}>
-        <SingleDropdown options={options} onChange={clickHandler}>
-          Search by Subject
-        </SingleDropdown>
-      </Form>
-    </div>
+    <Form btnName="Search" onSubmit={submitHandler}>
+      <SingleDropdown options={options} onChange={clickHandler}>
+        Search by Subject
+      </SingleDropdown>
+    </Form>
   );
 }
 

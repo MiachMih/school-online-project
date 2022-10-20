@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import DisplayAnnouncements from "./DisplayAnnouncements";
+import Loader from "../../form/Loader";
 import { getAnnouncements } from "../../../store/announcement-slice";
 import InfiniteScroll from "react-infinite-scroller";
+import { Container } from "../../form/Form";
 
 function MakeScroll({ limit, maxPages }) {
   const dispatch = useDispatch();
@@ -14,6 +16,8 @@ function MakeScroll({ limit, maxPages }) {
       getAnnouncements(`page=${page}&limit=${limit}`)
     );
 
+    // console.log(data);
+
     setData((state) => {
       return [...state, ...response];
     });
@@ -23,20 +27,18 @@ function MakeScroll({ limit, maxPages }) {
   }
 
   return (
-    <InfiniteScroll
-      pageStart={page}
-      hasMore={page < maxPages}
-      loadMore={fetchAnnouncements}
-      initialLoad={true}
-      loader={
-        <div className="loader" key={0}>
-          Loading ...
-        </div>
-      }
-      threshold={50}
-    >
-      <DisplayAnnouncements announcements={data} />
-    </InfiniteScroll>
+    <Container>
+      <InfiniteScroll
+        pageStart={page}
+        hasMore={page < maxPages}
+        loadMore={fetchAnnouncements}
+        initialLoad={true}
+        loader={<Loader />}
+        threshold={50}
+      >
+        <DisplayAnnouncements announcements={data} />
+      </InfiniteScroll>
+    </Container>
   );
 }
 

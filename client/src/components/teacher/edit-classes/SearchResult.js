@@ -71,9 +71,8 @@ function SearchResult(props) {
       setSubjectOptions(resultSubjects);
     }
     fetchAllSubjects();
-
     const prerequisites = searchResult?.class_prerequisites?.map((item) => {
-      return item.class_id;
+      return item.prerequisite_class_name;
     });
     setPrerequisiteOptions(prerequisites);
 
@@ -106,12 +105,6 @@ function SearchResult(props) {
   function subjectChangeHandler(e, { value }) {
     setEdit((state) => {
       return { ...state, subject: value };
-    });
-  }
-
-  function studentChangeHandler(e, { value }) {
-    setEdit((state) => {
-      return { ...state, student_list: value };
     });
   }
 
@@ -153,27 +146,35 @@ function SearchResult(props) {
         );
       })}
 
-      <DynamicDropdown
-        options={options}
-        value={edit.class_prerequisites}
-        onChange={prerequisiteChangeHandler}
-      >
-        Prerequisites
-      </DynamicDropdown>
-      {/* <DynamicDropdown
-        options={studentOptions}
-        value={edit.student_list}
-        onChange={studentChangeHandler}
-      >
-        Student List
-      </DynamicDropdown> */}
-      <DynamicSingleDropdown
-        options={subjectOptions}
-        value={edit.subject}
-        onChange={subjectChangeHandler}
-      >
-        Subject
-      </DynamicSingleDropdown>
+      {!viewEditSwitch && (
+        <DynamicDropdown
+          options={options}
+          value={edit.class_prerequisites}
+          onChange={prerequisiteChangeHandler}
+        >
+          Prerequisites
+        </DynamicDropdown>
+      )}
+
+      {viewEditSwitch && (
+        <View label={"Prerequisites"}>
+          {prerequisiteOptions.map((item, index) => {
+            return <React.Fragment key={index}>{item}, </React.Fragment>;
+          })}
+          {prerequisiteOptions.length === 0 && <>None</>}
+        </View>
+      )}
+
+      {!viewEditSwitch && (
+        <DynamicSingleDropdown
+          options={subjectOptions}
+          value={edit.subject}
+          onChange={subjectChangeHandler}
+        >
+          Subject
+        </DynamicSingleDropdown>
+      )}
+      {viewEditSwitch && <View label={"Subject"}>{edit.subject}</View>}
     </BasicCard>
   );
 }

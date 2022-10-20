@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(31, 122, 184, 0.205);
+  box-shadow: 0 0 8px 2px rgba(115, 143, 151, 0.24);
+  border: solid 1px rgba(159, 178, 184, 0.137);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  list-style: none;
+}
+
+.content h3 {
+  margin: 0;
+  padding: 0;
+  color: rgba(2, 21, 39, 0.767);
+  font-size: 19px;
+  font-weight: 200;
+}

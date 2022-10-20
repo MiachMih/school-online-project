@@ -187,6 +187,10 @@ export function Email(props) {
   );
 }
 
+export function Container(props) {
+  return <div className={styles.container}>{props.children}</div>;
+}
+
 const Form = React.forwardRef((props, ref) => {
   const { btnName } = props;
   return (

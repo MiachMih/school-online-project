@@ -1,31 +1,29 @@
 import React from "react";
-import Display from "./Display";
 import { Container } from "../../form/Form";
+import Display from "./Display";
 
-function History(props) {
-  const { previous_classes } = props;
-  const display = previous_classes.map((item) => {
+function RegisteredClasses(props) {
+  const { registered_classes } = props;
+  const display = registered_classes.map((item) => {
     return {
       id: item.class_id,
       subject_name: item.subject_name,
       teacher_name: item.teacher_name,
-      letter_grade: item.letter_grade,
     };
   });
 
   if (display.length === 0) {
-    return <Container>No Previous Classes</Container>;
+    return <Container>No Classes Registered for Next Year</Container>;
   }
 
   return (
     <Container>
-      {display.map((item, index) => {
+      {display.map((item) => {
         return (
           <Display
-            key={index}
+            key={item.id}
             subject_name={item.subject_name}
             teacher_name={item.teacher_name}
-            letter_grade={item.letter_grade}
           />
         );
       })}
@@ -33,4 +31,4 @@ function History(props) {
   );
 }
 
-export default History;
+export default RegisteredClasses;

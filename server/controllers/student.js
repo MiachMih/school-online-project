@@ -23,11 +23,11 @@ exports.updateStudent = async (req, res, next) => {
   // then in client side make dynamic responses
   try {
     const hashedPassword = await bcrypt.hash(password, 12);
-    const student = await Student.findOneAndUpdate(
+    await Student.updateOne(
       { _id: id },
       { email, password: hashedPassword, name, age, address }
     ).lean();
-
+    const student = await Student.findById(id);
     const token = jwt.sign({ email, password, id }, process.env.SECRET_KEY, {
       expiresIn: "2h",
     });
@@ -107,8 +107,7 @@ exports.signupStudent = async (req, res, next) => {
       detention_count: 0,
       GPA: 4,
     });
-    const result = { ...student, password: password };
-
+    const result = { ...student._doc, password: password };
     const token = jwt.sign(
       { email, password, id: result._id },
       process.env.SECRET_KEY,

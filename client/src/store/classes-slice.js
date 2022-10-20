@@ -59,3 +59,21 @@ export function fetchSubjects() {
     } catch (error) {}
   };
 }
+
+export function getIsYearInProgress() {
+  return async (dispatch) => {
+    try {
+      const response = await api.getIsYearInProgress();
+      return response.data.result;
+    } catch (error) {}
+  };
+}
+
+export function toggleYearInProgress() {
+  return async (dispatch) => {
+    try {
+      const response = await api.toggleYearInProgress();
+      return response.data.result;
+    } catch (error) {}
+  };
+}

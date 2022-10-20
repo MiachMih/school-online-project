@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateRegisteringClasses } from "../../../store/student-slice";
-import Form, { Dropdown } from "../../form/Form";
+import Form, { Dropdown, Container } from "../../form/Form";
 
 function DropClasses() {
   const dispatch = useDispatch();
@@ -27,11 +27,13 @@ function DropClasses() {
   }
 
   return (
-    <Form btnName="Remove" onSubmit={saveHandler}>
-      <Dropdown ref={regRef} options={options}>
-        Remove Class From Cart
-      </Dropdown>
-    </Form>
+    <Container>
+      <Form btnName="Remove" onSubmit={saveHandler}>
+        <Dropdown ref={regRef} options={options}>
+          Remove Class From Cart
+        </Dropdown>
+      </Form>
+    </Container>
   );
 }
 

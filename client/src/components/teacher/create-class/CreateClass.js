@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import styles from "./CreateClass.module.css";
 import { useDispatch } from "react-redux";
 import {
   newClass,
@@ -13,6 +12,7 @@ import Form, {
   Checkbox,
   Schedule,
   SingleDropdown,
+  Container,
 } from "../../form/Form";
 
 function CreateClass(props) {
@@ -107,8 +107,8 @@ function CreateClass(props) {
   // aka eliminate the refs
 
   return (
-    <div className={styles.container}>
-      <Form onSubmit={submitHandler} btnName="create" ref={formRef}>
+    <Container>
+      <Form onSubmit={submitHandler} btnName="Create" ref={formRef}>
         <Title>Create Class</Title>
         <Text onChange={changeHandler} name="class_name">
           Class Name
@@ -149,7 +149,7 @@ function CreateClass(props) {
           </Checkbox>
         </Schedule>
       </Form>
-    </div>
+    </Container>
   );
 }
 

@@ -38,13 +38,11 @@ function Search(props) {
   }
 
   return (
-    <div>
-      <Form onSubmit={submitHandler} btnName={"Search"}>
-        <SingleDropdown options={classNames} onChange={changeHandler}>
-          Class Name
-        </SingleDropdown>
-      </Form>
-    </div>
+    <Form onSubmit={submitHandler} btnName={"Search"}>
+      <SingleDropdown options={classNames} onChange={changeHandler}>
+        Class Name
+      </SingleDropdown>
+    </Form>
   );
 }
 

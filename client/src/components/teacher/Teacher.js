@@ -10,6 +10,7 @@ import EditClass from "./edit-classes/Edit";
 import AddSubject from "./add-subject/AddSubject";
 import Nav from "./TeacherNav";
 import Announcement from "./announcement/Announcement";
+import Year from "./start-year/Year";
 
 function Teacher() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function Teacher() {
             <Route path="/create-class" element={<CreateClass />} />
             <Route path="/add-subject" element={<AddSubject />} />
             <Route path="/announcement" element={<Announcement />} />
+            <Route path="/year" element={<Year />} />
           </Routes>
         )}
       </Nav>

@@ -1,16 +1,16 @@
 import React from "react";
 
 function Page(props) {
-  const { page, limit } = props;
+  const { page, limit, style } = props;
 
   function clickHandler() {
     props.setSearchParams({ limit, page });
   }
 
   return (
-    <div>
-      <button onClick={clickHandler}>{page}</button>
-    </div>
+    <button className={style} onClick={clickHandler}>
+      {page + 1}
+    </button>
   );
 }
 
