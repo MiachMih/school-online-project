@@ -1,2 +1,4 @@
 TODO: fix
 student can access teacher content
+
+TODO: validate inputs and send back a message on which requests aren't fulfilled

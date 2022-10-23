@@ -22,7 +22,7 @@ exports.toggleYearInProgress = async (req, res, next) => {
       { isYearInProgress: !response[0].isYearInProgress }
     ).session(session);
     const result = await Year.findById(response[0]._id).session(session);
-
+    console.log("hi");
     // make all current classes transfer into previous classes taken
     if (!result.isYearInProgress) {
       await Student.update(

@@ -62,8 +62,8 @@
   padding: 0.5em 1em;
   font-size: 1.5rem;
   font-weight: 400;
-  color: var(--text-color);
-  background-color: rgba(32, 97, 218, 0.493);
+  color: rgba(231, 244, 248, 0.911);
+  background-color: #103e66;
   border: 1px solid var(--focus-color);
   border-radius: 0.2em;
   outline: none;
@@ -73,7 +73,7 @@
 }
 
 .btn:hover {
-  background-color: rgba(55, 113, 221, 0.445);
+  background-color: #1c5f99d8;
   transition: var(--transition);
 }
 

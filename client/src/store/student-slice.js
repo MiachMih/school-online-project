@@ -52,7 +52,9 @@ export const loginStudent = (loginData, navigate) => {
       const response = await api.loginStudent(loginData);
       dispatch(userActions.create(response.data));
       navigate("/student", { replace: true });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 };
 

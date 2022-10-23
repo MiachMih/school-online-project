@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { Container, Button } from "../../form/Form";
 
 function ToggleYear(props) {
   const { isYearInProgress } = props;
@@ -12,12 +13,12 @@ function ToggleYear(props) {
     } catch (error) {}
   }
   return (
-    <div>
-      <button onClick={clickHandler}>
+    <Container>
+      <Button onClick={clickHandler}>
         {isYearInProgress && <>End Year</>}
         {!isYearInProgress && <>Start Year</>}
-      </button>
-    </div>
+      </Button>
+    </Container>
   );
 }
 

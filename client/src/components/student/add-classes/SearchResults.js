@@ -29,12 +29,10 @@ function SearchResults() {
   }, [dispatch, params, searchParams]);
 
   return (
-    <div>
-      <div>
-        {displayClasses.map((item) => {
-          return <DisplayClass key={item._id} result={item} />;
-        })}
-      </div>
+    <>
+      {displayClasses.map((item) => {
+        return <DisplayClass key={item._id} result={item} />;
+      })}
 
       <PageList
         currentPage={searchParams.get("page")}
@@ -42,7 +40,7 @@ function SearchResults() {
         limit={limit}
         setSearchParams={setSearchParams}
       />
-    </div>
+    </>
   );
 }
 

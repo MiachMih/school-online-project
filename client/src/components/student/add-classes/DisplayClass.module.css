@@ -24,9 +24,11 @@
 .card_btn {
   position: relative;
   text-decoration: none;
-  background-color: transparent;
+  background-color: #103e66;
+  /* border: solid 1px rgba(11, 48, 59, 0.637); */
   border: none;
-  color: rgba(255, 255, 255, 0.9);
+  padding: 5px 10px;
+  color: rgba(230, 240, 240, 0.945);
   cursor: pointer;
 }
 
@@ -37,7 +39,7 @@
   content: "";
   width: 0%;
   height: 3px;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgb(255, 255, 255);
   transition: all 0.5s;
 }
 
@@ -54,10 +56,42 @@
 .card__apply {
   grid-row: 4/5;
   align-self: center;
+  margin-top: 25px;
 }
 
 /* CARD BACKGROUNDS */
 
 .card-1 {
   background: radial-gradient(#1fe4f5, #3fbafe);
+}
+
+.container {
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(31, 122, 184, 0.205);
+  box-shadow: 0 0 8px 2px rgba(115, 143, 151, 0.24);
+  border: solid 1px rgba(159, 178, 184, 0.137);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  list-style: none;
+}
+
+.content h3 {
+  margin: 0;
+  padding: 0;
+  color: rgba(2, 21, 39, 0.89);
+  font-size: 19px;
+  font-weight: 200;
+}
+
+.content h4 {
+  margin: 0;
+  padding: 0;
+  color: rgba(4, 26, 39, 0.644);
+  font-size: 15px;
+  font-weight: 300;
 }

@@ -2,6 +2,7 @@ require("dotenv").config();
 const Student = require("../models/student");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const validator = require("validator");
 
 exports.getStudent = async (req, res, next) => {
   const id = req.userId;
@@ -41,10 +42,18 @@ exports.updateStudent = async (req, res, next) => {
 };
 
 exports.loginStudent = async (req, res, next) => {
+  const { email, password } = req.body;
   try {
     //TODO: give a detailed validation for each element
     // then in client side make dynamic responses
-    const { email, password } = req.body;
+    if (!(email && password)) {
+      const isEmail = email.length === 0;
+      const isPassword = password.length === 0;
+      return res
+        .status(400)
+        .json({ result: { email: !isEmail, password: !isPassword } });
+    }
+
     const existingStudent = await Student.findOne({
       email: email.toLowerCase(),
     }).lean();
@@ -121,8 +130,6 @@ exports.signupStudent = async (req, res, next) => {
   }
 };
 
-// TODO: transport this validate function to user controller
-// as well as create user route
 exports.validate = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {

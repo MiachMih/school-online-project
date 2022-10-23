@@ -191,6 +191,14 @@ export function Container(props) {
   return <div className={styles.container}>{props.children}</div>;
 }
 
+export function Button(props) {
+  return (
+    <button className={styles.btn} onClick={props.onClick}>
+      {props.children}
+    </button>
+  );
+}
+
 const Form = React.forwardRef((props, ref) => {
   const { btnName } = props;
   return (

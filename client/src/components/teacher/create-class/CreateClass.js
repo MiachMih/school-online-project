@@ -56,6 +56,7 @@ function CreateClass(props) {
     };
     dispatch(newClass(data));
     setForm(initialState);
+    e.target.reset();
   }
 
   useEffect(() => {
