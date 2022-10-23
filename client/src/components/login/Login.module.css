@@ -36,3 +36,18 @@
   color: white;
   transition: var(--transition);
 }
+
+.btn {
+  padding: 4px 8px;
+  border-radius: 0.2em;
+  color: rgba(231, 244, 248, 0.91);
+  background-color: #103e66;
+  border: 1px solid rgba(1, 65, 102, 0.78);
+  cursor: pointer;
+  box-shadow: 0 0 7px rgba(68, 235, 247, 0.568);
+}
+
+.btn:hover {
+  background-color: rgba(28, 95, 153, 0.847);
+  transition: all 0.35s;
+}

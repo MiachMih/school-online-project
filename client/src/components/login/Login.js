@@ -53,6 +53,7 @@ function Login() {
     <Container bg={bg}>
       <div id="hi" className={styles.content}>
         <button
+          className={styles.btn}
           onClick={() => {
             setIsStudentTeacher((state) => !state);
           }}
@@ -73,9 +74,9 @@ function Login() {
           </Password>
 
           <div className={styles.links}>
-            <a href="#hi" className={styles.link}>
+            {/* <a href="#hi" className={styles.link}>
               Forgot password
-            </a>
+            </a> */}
             <Link to="/signup" className={styles.link}>
               New User
             </Link>

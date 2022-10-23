@@ -27,13 +27,9 @@ exports.updateTeacher = async (req, res, next) => {
       { email, password: hashedPassword, name, age, address }
     ).lean();
 
-    const token = jwt.sign(
-      { email, password, id },
-      process.env.TEACHER_SECRET_KEY,
-      {
-        expiresIn: "2h",
-      }
-    );
+    const token = jwt.sign({ email, password, id }, process.env.SECRET_KEY, {
+      expiresIn: "2h",
+    });
 
     const result = { ...teacher, password: password };
     return res.status(200).json({ result, token });
@@ -71,7 +67,7 @@ exports.loginTeacher = async (req, res, next) => {
         password,
         id: existingTeacher._id,
       },
-      process.env.TEACHER_SECRET_KEY,
+      process.env.SECRET_KEY,
       { expiresIn: "2h" }
     );
 
@@ -102,28 +98,14 @@ exports.signupTeacher = async (req, res, next) => {
       address,
       age,
     });
-    const result = { ...teacher, password: password };
+    const result = { ...teacher._doc, password: password };
 
     const token = jwt.sign(
       { email, password, id: result._id },
-      process.env.TEACHER_SECRET_KEY,
+      process.env.SECRET_KEY,
       { expiresIn: "2h" }
     );
     return res.status(201).json({ result, token });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Something went wrong" });
-  }
-};
-
-exports.validate = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(200).json({ valid: false });
-  }
-  try {
-    jwt.verify(token, process.env.TEACHER_SECRET_KEY);
-    return res.status(200).json({ valid: true });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Something went wrong" });
