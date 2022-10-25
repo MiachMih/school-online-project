@@ -21,9 +21,11 @@
 .container h1 {
   font-size: 24px;
   font-weight: 400;
+  height: 40%;
 }
 
 .container p {
+  height: 60%;
   overflow-y: scroll;
 }
 

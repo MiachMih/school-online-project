@@ -46,15 +46,18 @@ exports.updateClass = async (req, res, next) => {
   } = req.body;
 
   try {
-    const filter = class_prerequisites.map((item) => {
-      return { _id: item };
-    });
-    const new_class_prerequisites = await Classes.find({}, "class_name")
-      .or(filter)
-      .lean();
-    const refactor_class_prerequisites = new_class_prerequisites.map((item) => {
-      return { class_id: item._id, prerequisite_class_name: item.class_name };
-    });
+    let refactor_class_prerequisites = [];
+    if (class_prerequisites.length > 0) {
+      const filter = class_prerequisites.map((item) => {
+        return { _id: item };
+      });
+      const new_class_prerequisites = await Classes.find({}, "class_name")
+        .or(filter)
+        .lean();
+      refactor_class_prerequisites = new_class_prerequisites.map((item) => {
+        return { class_id: item._id, prerequisite_class_name: item.class_name };
+      });
+    }
 
     await Classes.updateOne(
       { _id: id },
@@ -66,8 +69,10 @@ exports.updateClass = async (req, res, next) => {
         class_prerequisites: refactor_class_prerequisites,
       }
     );
+
     res.status(200).json({ message: "success" });
   } catch (error) {
+    console.log(error);
     res.status(404).json({ message: error.message });
   }
 };
@@ -85,44 +90,12 @@ exports.getClassPrerequisites = async (req, res, next) => {
   }
 };
 
-exports.addStudentToClassByPassword = async (req, res, next) => {
-  const id = req.userId;
-  const class_password = req.body?.classPassword;
-  try {
-    const { name: student_name } = await Student.findById(id);
-    const class_id = req.body?.classId;
-    const _class = await Classes.findById(class_id).lean();
-    if (!_class) {
-      return res.status(400).json({ message: "no class found with such id" });
-    }
-    const is_password_valid = await bcrypt.compare(
-      _class.password,
-      class_password
-    );
-    if (!is_password_valid) {
-      return res.status(400).json({ message: "Invalid class password" });
-    }
-    const updated_student_list = [
-      ..._class.student_list,
-      { student_name, student_id: id },
-    ];
-    const result = await Classes.findOneAndUpdate(
-      { _id: class_id },
-      { student_list: updated_student_list }
-    ).lean();
-    return res.status(200).json({ result });
-  } catch (error) {
-    return res.status(500).json({ message: "server error" + error.message });
-  }
-};
-
 exports.addStudentToClass = async (req, res, next) => {
   const { id } = req.body;
   const student_id = req.userId;
-  // TODO: make a session so that everything gets updated in every place appropriately
+
   const session = await mongoose.startSession();
   session.startTransaction();
-
   // make sure to pass session to each database request
 
   try {
@@ -139,12 +112,10 @@ exports.addStudentToClass = async (req, res, next) => {
 
     if (isEnrolled) {
       session.endSession();
-      return res
-        .status(200)
-        .json({
-          message: "student already enrolled",
-          result: { ...student, password: req.userPassword },
-        });
+      return res.status(200).json({
+        message: "student already enrolled",
+        result: { ...student, password: req.userPassword },
+      });
     }
 
     // check that student has all the prerequisites
@@ -204,7 +175,6 @@ exports.dropStudentFromClass = async (req, res, next) => {
 
   const session = await mongoose.startSession();
   session.startTransaction();
-  // TODO make sure to pass session to each database request
   const filter = remove_classes_id.map((id) => {
     return { class_id: id };
   });
@@ -288,6 +258,11 @@ exports.addNewClass = async (req, res, next) => {
       return res.status(400).json({ message: "All inputs are required" });
     }
 
+    const isExists = await Classes.exists({ class_name });
+    if (isExists) {
+      return res.status(400).json({ message: "Class already exists" });
+    }
+
     if (!req.body?.password) {
       // generates random number with length of 5
       // does not contain zeroes
@@ -303,8 +278,6 @@ exports.addNewClass = async (req, res, next) => {
       password = req.body.password;
     }
 
-    //TODO implement mongoose-unique-validator
-    // so that the app doesn't break on error
     const result = Classes.create({
       class_name,
       teacher_name,

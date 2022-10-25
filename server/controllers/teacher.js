@@ -2,6 +2,7 @@ require("dotenv").config();
 const Teacher = require("../models/teacher");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 exports.getTeacher = async (req, res, next) => {
   const id = req.userId;
@@ -18,8 +19,6 @@ exports.getTeacher = async (req, res, next) => {
 exports.updateTeacher = async (req, res, next) => {
   const id = req.userId;
   const { email, password, name, age, address } = req.body;
-  //TODO: give a detailed validation for each element
-  // then in client side make dynamic responses
   try {
     const hashedPassword = await bcrypt.hash(password, 12);
     const teacher = await Teacher.findOneAndUpdate(
@@ -41,8 +40,6 @@ exports.updateTeacher = async (req, res, next) => {
 
 exports.loginTeacher = async (req, res, next) => {
   try {
-    //TODO: give a detailed validation for each element
-    // then in client side make dynamic responses
     const { email, password } = req.body;
     const existingTeacher = await Teacher.findOne({
       email: email.toLowerCase(),
@@ -81,6 +78,8 @@ exports.loginTeacher = async (req, res, next) => {
 
 exports.signupTeacher = async (req, res, next) => {
   const { email, name, password, address, age } = req.body;
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     const existingTeacher = await Teacher.findOne({ email }).lean();
     if (!(email && name && password && address && age)) {
@@ -91,23 +90,32 @@ exports.signupTeacher = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const teacher = await Teacher.create({
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      name,
-      address,
-      age,
-    });
-    const result = { ...teacher._doc, password: password };
+    const teacher = await Teacher.create(
+      [
+        {
+          email: email.toLowerCase(),
+          password: hashedPassword,
+          name,
+          address,
+          age,
+        },
+      ],
+      { session }
+    );
+    const result = { ...teacher[0]._doc, password: password };
 
     const token = jwt.sign(
       { email, password, id: result._id },
       process.env.SECRET_KEY,
       { expiresIn: "2h" }
     );
+
+    await session.commitTransaction();
+    session.endSession();
     return res.status(201).json({ result, token });
   } catch (error) {
     console.log(error);
+    await session.abortTransaction();
     return res.status(500).json({ message: "Something went wrong" });
   }
 };

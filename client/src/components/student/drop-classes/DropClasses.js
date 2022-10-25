@@ -19,11 +19,14 @@ function DropClasses() {
 
   async function saveHandler(e) {
     e.preventDefault();
-    dispatch(
-      updateRegisteringClasses({
-        remove_classes_id: regRef.current.state.value,
-      })
-    );
+
+    if (!(regRef.current.state.value.length === 0)) {
+      dispatch(
+        updateRegisteringClasses({
+          remove_classes_id: regRef.current.state.value,
+        })
+      );
+    }
   }
 
   return (

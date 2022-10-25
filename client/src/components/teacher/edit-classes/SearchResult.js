@@ -115,9 +115,11 @@ function SearchResult(props) {
   async function saveHandler(e) {
     e.preventDefault();
     const response = await dispatch(updateClass(edit));
+    // console.log(response);
+    toggleHandler();
     props.setSearchResult(response);
   }
-  // TODO: add schedule
+
   return (
     <BasicCard
       onSave={saveHandler}

@@ -13,7 +13,11 @@ exports.addSubject = async (req, res, next) => {
   const { name } = req.body;
   try {
     if (!name) {
-      return res.status(400).json({ message: "no name provided" });
+      return res.status(400).json({ message: "No name provided" });
+    }
+    const isExists = await Subject.exists({ name });
+    if (isExists) {
+      return res.status(400).json({ message: "Subject already exists" });
     }
     await Subject.create({ name });
     return res.status(200);

@@ -2,7 +2,7 @@ require("dotenv").config();
 const Student = require("../models/student");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const validator = require("validator");
+const mongoose = require("mongoose");
 
 exports.getStudent = async (req, res, next) => {
   const id = req.userId;
@@ -91,6 +91,8 @@ exports.loginStudent = async (req, res, next) => {
 
 exports.signupStudent = async (req, res, next) => {
   const { email, name, password, address, age, class_grade } = req.body;
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     const existingStudent = await Student.findOne({ email }).lean();
     //TODO: give a detailed validation for each element
@@ -105,27 +107,38 @@ exports.signupStudent = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const student = await Student.create({
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      name,
-      address,
-      age,
-      class_grade,
-      honors_classes_taken: 0,
-      detention_count: 0,
-      GPA: 4,
-    });
-    const result = { ...student._doc, password: password };
+    const response = await Student.create(
+      [
+        {
+          email: email.toLowerCase(),
+          password: hashedPassword,
+          name,
+          address,
+          age,
+          class_grade,
+          honors_classes_taken: 0,
+          detention_count: 0,
+          GPA: 4,
+        },
+      ],
+      { session }
+    );
+
+    const student = { ...response[0]._doc };
+
+    const result = { ...student, password: password };
     const token = jwt.sign(
       { email, password, id: result._id },
       process.env.SECRET_KEY,
       { expiresIn: "2h" }
     );
 
+    await session.commitTransaction();
+    session.endSession();
     return res.status(201).json({ result, token });
   } catch (error) {
     console.log(error);
+    await session.abortTransaction();
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
