@@ -64,6 +64,7 @@ function Student() {
             />
             <Route path="/add-classes/*" element={<AddClasses />} />
             <Route path="/drop-classes" element={<DropClasses />} />
+            <Route path="*" element={<Profile student={student} />} />
           </Routes>
         )}
       </Nav>

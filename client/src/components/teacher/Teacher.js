@@ -38,6 +38,7 @@ function Teacher() {
             <Route path="/add-subject" element={<AddSubject />} />
             <Route path="/announcement" element={<Announcement />} />
             <Route path="/year" element={<Year />} />
+            <Route path="*" element={<Profile teacher={teacher} />} />
           </Routes>
         )}
       </Nav>

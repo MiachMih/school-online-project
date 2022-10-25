@@ -18,6 +18,7 @@ function App() {
         <Route path="/signup/*" element={<Signup />} />
         <Route path="/student/*" element={<Student />} />
         <Route path="/teacher/*" element={<Teacher />} />
+        <Route path="*" element={<Login />} />
       </Routes>
     </Fragment>
   );
